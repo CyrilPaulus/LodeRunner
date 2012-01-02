@@ -36,7 +36,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils/ImageManager.o \
-	${OBJECTDIR}/Game.o
+	${OBJECTDIR}/Game.o \
+	${OBJECTDIR}/utils/Ticker.o
 
 
 # C Compiler Flags
@@ -77,6 +78,11 @@ ${OBJECTDIR}/Game.o: Game.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Game.o Game.cpp
+
+${OBJECTDIR}/utils/Ticker.o: utils/Ticker.cpp 
+	${MKDIR} -p ${OBJECTDIR}/utils
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/utils/Ticker.o utils/Ticker.cpp
 
 # Subprojects
 .build-subprojects:

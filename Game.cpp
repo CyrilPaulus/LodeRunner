@@ -11,14 +11,17 @@
 
 Game::Game() {
     running = false;
+    ticker = new Ticker();
+    ticker->setRate(50);
+    
     sprite = new sf::Sprite();
     sprite->SetTexture(*(imgManager.get("player")));
-}
-
-Game::Game(const Game& orig) {
+    framecount = 0;
 }
 
 Game::~Game() {
+    delete(ticker);
+    delete(sprite);
 }
 
 int Game::Run(sf::RenderWindow& app) {
@@ -32,12 +35,20 @@ int Game::Run(sf::RenderWindow& app) {
             HandleEvent(event);
         }
         
+        if(ticker->Tick()) 
+          Update(ticker->getElapsedTime());
+        
         //Draw screen
         Draw(app);
         app.Display();
     }
     
     return Screen::EXIT;
+}
+
+void Game::Update(unsigned int frametime) {
+    framecount++;
+    std::cout << framecount << std::endl;
 }
 
 void Game::HandleEvent(sf::Event event) {

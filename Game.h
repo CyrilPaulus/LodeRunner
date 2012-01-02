@@ -10,6 +10,7 @@
 
 #include "Screen.h"
 #include "utils/ImageManager.h"
+#include "utils/Ticker.h"
 
 class Game : public Screen{
 public:
@@ -23,14 +24,16 @@ private:
     void Draw(sf::RenderTarget &app);
     void Update(unsigned int frametime);
     void HandleEvent(sf::Event event);
-    
+   
     //Event
     void OnKeyPressed(sf::Event event);
     void OnClose();
     
     bool running;
     ImageManager imgManager;
+    Ticker* ticker;
     sf::Sprite *sprite;
+    int framecount;
 
 };
 
