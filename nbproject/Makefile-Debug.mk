@@ -37,6 +37,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils/ImageManager.o \
 	${OBJECTDIR}/Game.o \
+	${OBJECTDIR}/entity/World.o \
 	${OBJECTDIR}/entity/Block.o \
 	${OBJECTDIR}/utils/Ticker.o \
 	${OBJECTDIR}/entity/Entity.o
@@ -80,6 +81,11 @@ ${OBJECTDIR}/Game.o: Game.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Game.o Game.cpp
+
+${OBJECTDIR}/entity/World.o: entity/World.cpp 
+	${MKDIR} -p ${OBJECTDIR}/entity
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/entity/World.o entity/World.cpp
 
 ${OBJECTDIR}/entity/Block.o: entity/Block.cpp 
 	${MKDIR} -p ${OBJECTDIR}/entity

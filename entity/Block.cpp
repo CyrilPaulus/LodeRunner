@@ -9,7 +9,8 @@
 #include "Block.h"
 
 
-const char* Block::file[] = {"map/wall", "map/cement", "map/slide", "map/ladder"};
+const char* Block::file[] = {"", "map/wall", "map/cement", "map/ladder", 
+                                "map/slide", "map/wall", "map/ladder"};
 
 Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
     this->type = type;

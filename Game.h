@@ -11,7 +11,7 @@
 #include "Screen.h"
 #include "utils/ImageManager.h"
 #include "utils/Ticker.h"
-#include "entity/Block.h"
+#include "entity/World.h"
 
 class Game : public Screen{
 public:
@@ -19,10 +19,10 @@ public:
     Game(const Game& orig);
     virtual ~Game();
     
-    virtual int Run(sf::RenderWindow &app);
+    virtual int Run(sf::RenderWindow *app);
     
 private:
-    void Draw(sf::RenderTarget &app);
+    void Draw(sf::RenderTarget *app);
     void Update(unsigned int frametime);
     void HandleEvent(sf::Event event);
    
@@ -33,9 +33,8 @@ private:
     bool running;
     ImageManager imgManager;
     Ticker* ticker;
-    sf::Sprite *sprite;
-    Block *block;
-    int framecount;
+    
+    World* world;
 
 };
 

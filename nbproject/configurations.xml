@@ -17,6 +17,8 @@
         <itemPath>entity/Block.h</itemPath>
         <itemPath>entity/Entity.cpp</itemPath>
         <itemPath>entity/Entity.h</itemPath>
+        <itemPath>entity/World.cpp</itemPath>
+        <itemPath>entity/World.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="utils" projectFiles="true">
         <itemPath>utils/ImageManager.cpp</itemPath>

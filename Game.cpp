@@ -15,25 +15,22 @@ Game::Game() {
     ticker = new Ticker();
     ticker->setRate(50);
     
-    sprite = new sf::Sprite();
-    sprite->SetTexture(*(imgManager.get("player")));
-    block = new Block(&imgManager, Block::CEMENT);
-    framecount = 0;
+    world = new World(&imgManager);
 }
 
 Game::~Game() {
     delete(ticker);
-    delete(sprite);
+    delete(world);
 }
 
-int Game::Run(sf::RenderWindow& app) {
+int Game::Run(sf::RenderWindow *app) {
     running = true;
-    
+    world->LoadFromFile("res/map/map0");
     sf::Event event;
     while(running) {
         
         //Manage event
-        while(app.PollEvent(event)) {
+        while(app->PollEvent(event)) {
             HandleEvent(event);
         }
         
@@ -42,15 +39,14 @@ int Game::Run(sf::RenderWindow& app) {
         
         //Draw screen
         Draw(app);
-        app.Display();
+        app->Display();
     }
     
     return Screen::EXIT;
 }
 
 void Game::Update(unsigned int frametime) {
-    framecount++;
-    std::cout << framecount << std::endl;
+    
 }
 
 void Game::HandleEvent(sf::Event event) {
@@ -80,11 +76,9 @@ void Game::OnKeyPressed(sf::Event event) {
     }
 }
 
-void Game::Draw(sf::RenderTarget &target) {
-    target.Clear(sf::Color(150,150,150));
-    
-    
-    target.Draw(*sprite);    
-    block->Draw(&target);
+void Game::Draw(sf::RenderTarget *rt) {
+    rt->Clear(sf::Color(150,150,150));  
+    world->Draw(rt);
+   
     
 }

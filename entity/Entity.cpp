@@ -42,7 +42,7 @@ void Entity::SetCenter(sf::Vector2f center) {
     this->center = center;
 }
 
-void Entity::SetPosition(sf::Vector2f pos) {
+void Entity::SetPosition(sf::Vector2f position) {
     this->position = position;
     image->SetPosition(position);
 }

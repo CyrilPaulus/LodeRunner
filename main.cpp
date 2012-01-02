@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     screens.push_back(&game);
     
     while(screen != Screen::EXIT) {
-        screen = screens[screen]->Run(app);
+        screen = screens[screen]->Run(&app);
     }
     
     return EXIT_SUCCESS;
