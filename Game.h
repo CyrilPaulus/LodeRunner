@@ -11,6 +11,7 @@
 #include "Screen.h"
 #include "utils/ImageManager.h"
 #include "utils/Ticker.h"
+#include "entity/Block.h"
 
 class Game : public Screen{
 public:
@@ -33,6 +34,7 @@ private:
     ImageManager imgManager;
     Ticker* ticker;
     sf::Sprite *sprite;
+    Block *block;
     int framecount;
 
 };

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "Game.h"
+#include "entity/Entity.h"
 
 
 Game::Game() {
@@ -16,6 +17,7 @@ Game::Game() {
     
     sprite = new sf::Sprite();
     sprite->SetTexture(*(imgManager.get("player")));
+    block = new Block(&imgManager, Block::CEMENT);
     framecount = 0;
 }
 
@@ -83,5 +85,6 @@ void Game::Draw(sf::RenderTarget &target) {
     
     
     target.Draw(*sprite);    
+    block->Draw(&target);
     
 }

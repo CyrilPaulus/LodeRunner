@@ -37,7 +37,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils/ImageManager.o \
 	${OBJECTDIR}/Game.o \
-	${OBJECTDIR}/utils/Ticker.o
+	${OBJECTDIR}/entity/Block.o \
+	${OBJECTDIR}/utils/Ticker.o \
+	${OBJECTDIR}/entity/Entity.o
 
 
 # C Compiler Flags
@@ -79,10 +81,20 @@ ${OBJECTDIR}/Game.o: Game.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Game.o Game.cpp
 
+${OBJECTDIR}/entity/Block.o: entity/Block.cpp 
+	${MKDIR} -p ${OBJECTDIR}/entity
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/entity/Block.o entity/Block.cpp
+
 ${OBJECTDIR}/utils/Ticker.o: utils/Ticker.cpp 
 	${MKDIR} -p ${OBJECTDIR}/utils
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/utils/Ticker.o utils/Ticker.cpp
+
+${OBJECTDIR}/entity/Entity.o: entity/Entity.cpp 
+	${MKDIR} -p ${OBJECTDIR}/entity
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/entity/Entity.o entity/Entity.cpp
 
 # Subprojects
 .build-subprojects:
