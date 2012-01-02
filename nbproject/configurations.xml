@@ -13,8 +13,8 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="utils" projectFiles="true">
-        <itemPath>ImageManager.cpp</itemPath>
-        <itemPath>ImageManager.h</itemPath>
+        <itemPath>utils/ImageManager.cpp</itemPath>
+        <itemPath>utils/ImageManager.h</itemPath>
       </logicalFolder>
       <itemPath>Game.cpp</itemPath>
       <itemPath>Game.h</itemPath>

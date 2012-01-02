@@ -9,7 +9,7 @@
 #define	GAME_H
 
 #include "Screen.h"
-#include "ImageManager.h"
+#include "utils/ImageManager.h"
 
 class Game : public Screen{
 public:

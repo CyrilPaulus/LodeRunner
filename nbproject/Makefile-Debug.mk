@@ -35,8 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/Game.o \
-	${OBJECTDIR}/ImageManager.o
+	${OBJECTDIR}/utils/ImageManager.o \
+	${OBJECTDIR}/Game.o
 
 
 # C Compiler Flags
@@ -68,15 +68,15 @@ ${OBJECTDIR}/main.o: main.cpp
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
+${OBJECTDIR}/utils/ImageManager.o: utils/ImageManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/utils
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/utils/ImageManager.o utils/ImageManager.cpp
+
 ${OBJECTDIR}/Game.o: Game.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/Game.o Game.cpp
-
-${OBJECTDIR}/ImageManager.o: ImageManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/ImageManager.o ImageManager.cpp
 
 # Subprojects
 .build-subprojects:
