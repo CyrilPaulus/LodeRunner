@@ -27,5 +27,12 @@ bool Block::IsSolid() {
     return type == Block::CEMENT || type == Block::WALL;
 }
 
+bool Block::IsLadder() {
+    return type == Block::LADDER || type == Block::ENDLADDER;
+}
+
+bool Block::IsRope() {
+    return type == Block::ROPE;
+}
 
 

@@ -22,6 +22,7 @@ private:
     bool moveX;
     bool moveY;
     bool isFalling;
+    bool canFall;
     World *world;
 };
 

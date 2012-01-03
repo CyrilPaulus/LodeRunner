@@ -12,7 +12,7 @@
 
 class Block : public Entity {
 public:
-    enum {EMPTY, WALL, CEMENT, LADDER, SLIDE, FALSE, ENDLADDER};
+    enum {EMPTY, WALL, CEMENT, LADDER, ROPE, FALSE, ENDLADDER};
     static const int WIDTH = 36;
     static const int HEIGHT = 30;
     
@@ -20,6 +20,8 @@ public:
     
     void Update(unsigned int time);
     bool IsSolid();
+    bool IsLadder();
+    bool IsRope();
 private:
     
     static const char* file[];

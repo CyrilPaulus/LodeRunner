@@ -84,3 +84,33 @@ Block* World::GetCollidingSolid(sf::FloatRect bbox) {
     return NULL;
 }
 
+Block* World::GetCollidingLadder(sf::FloatRect bbox) {
+
+    for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
+        for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+            Block *candidate = blocks[j * width + i];          
+            if (candidate->GetBbox().Intersects(bbox) && candidate->IsLadder() ) {            
+            return candidate;
+        }
+    }
+    
+    return NULL;
+}
+
+Block* World::GetCollidingRope(sf::FloatRect bbox) {
+
+    for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
+        for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+            Block *candidate = blocks[j * width + i];          
+            if (candidate->GetBbox().Intersects(bbox) && candidate->IsRope() ) {            
+            return candidate;
+        }
+    }
+    
+    return NULL;
+}
+
+sf::Vector2f World::GetSize() {
+    return sf::Vector2f(width * Block::WIDTH, height * Block::HEIGHT);
+}
+

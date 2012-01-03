@@ -23,6 +23,9 @@ public:
     void Update(unsigned int frametime, Input in);
     void Draw(sf::RenderTarget* rt);
     Block* GetCollidingSolid(sf::FloatRect bbox);
+    Block* GetCollidingLadder(sf::FloatRect bbox);
+    Block* GetCollidingRope(sf::FloatRect bbox);
+    sf::Vector2f GetSize();
     
     virtual ~World();
     
