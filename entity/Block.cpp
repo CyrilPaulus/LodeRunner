@@ -17,10 +17,23 @@ Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
     if(type != Block::EMPTY)
         image->SetTexture(*imgManager->get(file[type]));
     SetBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
+    if(type == Block::ENDLADDER)
+        active = false;
+    else
+        active = true;
 }
 
 void Block::Update(unsigned int time) {
     
+}
+
+int Block::GetType() {
+    return type;
+}
+
+void Block::Draw(sf::RenderTarget* rt) {
+    if(active)
+        Entity::Draw(rt);
 }
 
 bool Block::IsSolid() {
@@ -28,11 +41,16 @@ bool Block::IsSolid() {
 }
 
 bool Block::IsLadder() {
-    return type == Block::LADDER || type == Block::ENDLADDER;
+    return (type == Block::LADDER || type == Block::ENDLADDER) && active;
 }
 
 bool Block::IsRope() {
     return type == Block::ROPE;
 }
+
+void Block::SetActive(bool active) {
+    this->active = active;
+}
+
 
 

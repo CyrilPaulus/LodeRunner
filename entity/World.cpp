@@ -14,24 +14,38 @@ World::World(ImageManager *imgManager) {
     player = new Character(imgManager, this);
     width = 0;
     height = 0;
+    completed = false;
 }
 
 
 World::~World() {
-    std::vector<Block*>::iterator it;
-    for(it = blocks.begin(); it != blocks.end(); it++)
-        free(*it);
+    Clean();    
     delete player;
 }
 
-void World::Draw(sf::RenderTarget* rt) {
-    
-       
+void World::Clean() {
     std::vector<Block*>::iterator it;
+    for(it = blocks.begin(); it != blocks.end(); it++)
+        free(*it);
     
-     
+    std::vector<Goal*>::iterator git;     
+    for(git = goals.begin(); git != goals.end(); git++)
+        free(*git);
+    blocks.empty();
+    goals.empty();
+    completed = false;
+}
+
+void World::Draw(sf::RenderTarget* rt) {
+          
+    std::vector<Block*>::iterator it;     
     for(it = blocks.begin(); it != blocks.end(); it++)
         (*it)->Draw(rt);
+    
+    std::vector<Goal*>::iterator git;     
+    for(git = goals.begin(); git != goals.end(); git++)
+        (*git)->Draw(rt);
+    
     player->Draw(rt);
 }
 
@@ -41,9 +55,25 @@ void World::Update(unsigned int frametime, Input input) {
         (*it)->Update(frametime);
     
     player->Update(frametime, input);
+    
+    std::vector<Goal*>::iterator git;     
+    for(git = goals.begin(); git != goals.end(); git++)
+        if(player->GetBbox().Intersects((*git)->GetBbox())) {
+            delete(*git);
+            git = goals.erase(git);
+            git--;            
+        }
+    
+    if(goals.size() == 0 && !completed) {
+        completed = true;
+        for(it = blocks.begin(); it != blocks.end(); it++)
+            if((*it)->GetType() == Block::ENDLADDER)
+                (*it)->SetActive(true);
+    }
 }
 
 void World::LoadFromFile(char* filename) {
+    Clean();
     FILE *f = fopen(filename, "r");
     if(!f) {
         std::cerr << "Can't load file: " << filename << std::endl;
@@ -62,9 +92,19 @@ void World::LoadFromFile(char* filename) {
                 b = new Block(imgManager, value);
              else 
                 b = new Block(imgManager, Block::EMPTY);
- 
+              
             b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
             blocks.push_back(b);
+            
+            //Player
+            if(value == 9)
+                player->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+            //Goal
+            if(value == 7) {
+                Goal* g = new Goal(imgManager);
+                g->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+                goals.push_back(g);
+            }
         }
         fscanf(f, "\n");
     }

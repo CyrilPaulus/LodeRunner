@@ -44,9 +44,10 @@ void Character::Update(unsigned int frametime, Input input) {
       
     }
     
-    
-    if(rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 3 && !input.Down) {
-        SetPosition(sf::Vector2f(GetPosition().x, rope->GetPosition().y));
+
+    if ((rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 3 && !input.Down) || ladder) {
+        if (rope)
+            SetPosition(sf::Vector2f(GetPosition().x, rope->GetPosition().y));
         canFall = false;
         isFalling = false;
     }
@@ -101,17 +102,14 @@ void Character::Update(unsigned int frametime, Input input) {
         
         //Special case to walk on ladder
         ladder = world->GetCollidingLadder(GetBbox());
-        if(ladder != NULL && direction.y > 0 && isFalling && canFall) {
+        if(ladder != NULL && direction.y > 0 && isFalling && canFall && ladder->GetPosition().y > position.y) {
             if(!input.Down)
                 SetPosition(sf::Vector2f(position.x, ladder->GetBbox().Top - GetBbox().Height));            
             isFalling = false;            
         }
         
         
-    }
-    
-    
-  
+    }  
    
   
 }

@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include "../utils/ImageManager.h"
 #include "Block.h"
+#include "Goal.h"
 #include "Character.h"
 
 class Character;
@@ -33,10 +34,14 @@ public:
 private:
     int width;
     int height;
+    bool completed;
     
     ImageManager *imgManager;
     std::vector<Block*> blocks;
+    std::vector<Goal*> goals;
     Character* player;
+    
+    void Clean();
     
     
     

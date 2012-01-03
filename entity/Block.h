@@ -19,13 +19,17 @@ public:
     Block(ImageManager *imgManager, int type);
     
     void Update(unsigned int time);
+    void Draw(sf::RenderTarget* rt);
     bool IsSolid();
     bool IsLadder();
     bool IsRope();
+    void SetActive(bool active);
+    int GetType();
 private:
     
     static const char* file[];
     int type;
+    bool active;
 };
 
 #endif	/* BLOCK_H */

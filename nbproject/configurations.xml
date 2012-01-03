@@ -19,6 +19,8 @@
         <itemPath>entity/Character.h</itemPath>
         <itemPath>entity/Entity.cpp</itemPath>
         <itemPath>entity/Entity.h</itemPath>
+        <itemPath>entity/Goal.cpp</itemPath>
+        <itemPath>entity/Goal.h</itemPath>
         <itemPath>entity/World.cpp</itemPath>
         <itemPath>entity/World.h</itemPath>
       </logicalFolder>
