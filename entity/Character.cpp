@@ -45,7 +45,7 @@ void Character::Update(unsigned int frametime, Input input) {
     }
     
     
-    if(rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 5) {
+    if(rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 3 && !input.Down) {
         SetPosition(sf::Vector2f(GetPosition().x, rope->GetPosition().y));
         canFall = false;
         isFalling = false;
