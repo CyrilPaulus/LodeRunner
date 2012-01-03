@@ -9,12 +9,12 @@
 #include "Block.h"
 
 
-const char* Block::file[] = {"", "map/wall", "map/cement", "map/ladder", 
+const char* Block::file[] = {"map/empty", "map/wall", "map/cement", "map/ladder", 
                                 "map/slide", "map/wall", "map/ladder"};
 
 Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
     this->type = type;
-    if(type != Block::EMPTY)
+    //if(type != Block::EMPTY)
         image->SetTexture(*imgManager->get(file[type]));
     SetBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
     if(type == Block::ENDLADDER)

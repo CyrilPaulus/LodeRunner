@@ -9,6 +9,7 @@
 #define	WORLD_H
 
 #include <vector>
+#include <list>
 #include <SFML/Graphics.hpp>
 #include "../utils/ImageManager.h"
 #include "Block.h"
@@ -41,6 +42,9 @@ private:
     std::vector<Goal*> goals;
     std::vector<Character*> enemies;
     Character* player;
+    
+    bool IsUnderRope(int x, int y);
+    std::list<Block*> GetNeighbors(int x, int y);
     
     void Clean();
     

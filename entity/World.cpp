@@ -61,9 +61,10 @@ void World::Draw(sf::RenderTarget* rt) {
 
 void World::Update(unsigned int frametime, Input input) {
     std::vector<Block*>::iterator it;
-    for(it = blocks.begin(); it != blocks.end(); it++)
+    for(it = blocks.begin(); it != blocks.end(); it++){
         (*it)->Update(frametime);
-    
+        (*it)->SetColor(sf::Color(255,255,255));
+    }
     player->Update(frametime, input);
     
     std::vector<Goal*>::iterator git;     
@@ -79,6 +80,12 @@ void World::Update(unsigned int frametime, Input input) {
         for(it = blocks.begin(); it != blocks.end(); it++)
             if((*it)->GetType() == Block::ENDLADDER)
                 (*it)->SetActive(true);
+    }
+    
+    std::list<Block*>neighbours = GetNeighbors(player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
+    std::list<Block*>::iterator n;
+    for(n = neighbours.begin(); n != neighbours.end(); n++){        
+        (*n)->SetColor(sf::Color(255,0,0));
     }
 }
 
@@ -168,3 +175,44 @@ sf::Vector2f World::GetSize() {
     return sf::Vector2f(width * Block::WIDTH, height * Block::HEIGHT);
 }
 
+bool World::IsUnderRope(int x, int y) {
+    for(int j = y - 1; j > 0; j--) {
+        if(blocks[j*width + x]->GetType() == Block::ROPE)
+            return true;
+        else if(blocks[j*width+x]->IsSolid())
+            break;
+    }
+    return false;
+}
+
+std::list<Block*> World::GetNeighbors(int x, int y) {
+    std::list<Block*> value;
+    Block* current = blocks[y * width + x];
+    bool isSolidUnderCurrent = false;
+    if (y + 1 < height ) 
+        isSolidUnderCurrent = blocks[(y+1) * width + x]->IsSolid();
+    
+    int xs[] = {x, x - 1, x + 1, x};
+    int ys[] = {y - 1, y, y, y + 1};
+
+   
+    for (int i = 0; i < 4; i++) {
+        std::cout << xs[i] << " " << ys[i] << " " << width << " " << height << std::endl;
+        if (xs[i] < 0 || xs[i] >= width || ys[i] < 0 || ys[i] >= height)
+            continue;
+                 
+        Block* candidate = blocks[ys[i] * width + xs[i]];
+
+        if ((candidate->IsLadder() || candidate->IsRope()) && (i == 1 || i == 2))
+            value.push_back(candidate);
+        else if (candidate->GetType() == Block::EMPTY && (i == 1 || i == 2) &&
+                (current->IsLadder() || current->IsRope() || isSolidUnderCurrent))
+            value.push_back(candidate);
+        else if (!candidate->IsSolid() && i == 3)
+            value.push_back(candidate);
+        else if (!(candidate->IsSolid()) && i == 0
+                && current->IsLadder())
+            value.push_back(candidate);
+    }
+    return value;
+}
