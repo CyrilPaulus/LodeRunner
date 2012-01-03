@@ -12,6 +12,7 @@
 World::World(ImageManager *imgManager) {
     this->imgManager = imgManager;
     player = new Character(imgManager, this);
+    player->SetColor(sf::Color(0,0,255));
     width = 0;
     height = 0;
     completed = false;
@@ -31,6 +32,11 @@ void World::Clean() {
     std::vector<Goal*>::iterator git;     
     for(git = goals.begin(); git != goals.end(); git++)
         free(*git);
+    
+    std::vector<Character*>::iterator enm;     
+    for(enm = enemies.begin(); enm != enemies.end(); enm++)
+        free(*enm);
+    
     blocks.empty();
     goals.empty();
     completed = false;
@@ -45,6 +51,10 @@ void World::Draw(sf::RenderTarget* rt) {
     std::vector<Goal*>::iterator git;     
     for(git = goals.begin(); git != goals.end(); git++)
         (*git)->Draw(rt);
+    
+    std::vector<Character*>::iterator enm;     
+    for(enm = enemies.begin(); enm != enemies.end(); enm++)
+        (*enm)->Draw(rt);
     
     player->Draw(rt);
 }
@@ -75,32 +85,36 @@ void World::Update(unsigned int frametime, Input input) {
 void World::LoadFromFile(char* filename) {
     Clean();
     FILE *f = fopen(filename, "r");
-    if(!f) {
+    if (!f) {
         std::cerr << "Can't load file: " << filename << std::endl;
         return;
     }
-    
+
     fscanf(f, "d%dx%d\n", &width, &height);
-    for(int j = 0; j < height; j++) {
-        for(int i = 0; i < width; i++) {
+    for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
             int value;
             fscanf(f, "%1d", &value);
-            
+
             //BLOCK
-             Block* b = NULL;
-            if(value >= 1 && value <= 6) 
+            Block* b = NULL;
+            if (value >= 1 && value <= 6)
                 b = new Block(imgManager, value);
-             else 
+            else
                 b = new Block(imgManager, Block::EMPTY);
-              
+
             b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
             blocks.push_back(b);
-            
-            //Player
-            if(value == 9)
+
+
+            if (value == 9)
                 player->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
-            //Goal
-            if(value == 7) {
+
+            else if (value == 8) {
+                Character* en = new Character(imgManager, this);
+                en->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+                enemies.push_back(en);
+            } else if (value == 7) {
                 Goal* g = new Goal(imgManager);
                 g->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
                 goals.push_back(g);

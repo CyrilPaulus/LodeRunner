@@ -39,6 +39,7 @@ private:
     ImageManager *imgManager;
     std::vector<Block*> blocks;
     std::vector<Goal*> goals;
+    std::vector<Character*> enemies;
     Character* player;
     
     void Clean();
