@@ -46,7 +46,14 @@ int Game::Run(sf::RenderWindow *app) {
 }
 
 void Game::Update(unsigned int frametime) {
+    Input input;
+    input.Left = sf::Keyboard::IsKeyPressed(sf::Keyboard::Left);
+    input.Right = sf::Keyboard::IsKeyPressed(sf::Keyboard::Right);
+    input.Up = sf::Keyboard::IsKeyPressed(sf::Keyboard::Up);
+    input.Down = sf::Keyboard::IsKeyPressed(sf::Keyboard::Down);
     
+    world->Update(frametime, input);
+
 }
 
 void Game::HandleEvent(sf::Event event) {

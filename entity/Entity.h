@@ -16,9 +16,9 @@ public:
     virtual ~Entity();
     
     void Draw(sf::RenderTarget *rt);
-    virtual void Update(unsigned int time) = 0;
-    
-    sf::Vector2f GetBbox();
+    void SetColor(sf::Color color);
+        
+    sf::FloatRect GetBbox();
     sf::Vector2f GetPosition(); 
     sf::Vector2f GetCenter();
     

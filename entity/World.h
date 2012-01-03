@@ -12,14 +12,17 @@
 #include <SFML/Graphics.hpp>
 #include "../utils/ImageManager.h"
 #include "Block.h"
+#include "Character.h"
 
+class Character;
 
 class World {
 public:
     World(ImageManager *imgManager);
     
-    void Update(unsigned int frametime);
+    void Update(unsigned int frametime, Input in);
     void Draw(sf::RenderTarget* rt);
+    Block* GetCollidingSolid(sf::FloatRect bbox);
     
     virtual ~World();
     
@@ -30,6 +33,9 @@ private:
     
     ImageManager *imgManager;
     std::vector<Block*> blocks;
+    Character* player;
+    
+    
     
 };
 

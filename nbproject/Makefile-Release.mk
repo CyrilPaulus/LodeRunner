@@ -34,6 +34,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/entity/Character.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils/ImageManager.o \
 	${OBJECTDIR}/Game.o \
@@ -66,6 +67,11 @@ LDLIBSOPTIONS=-lsfml-graphics -lsfml-window -lsfml-system
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/loderunner: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/loderunner ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/entity/Character.o: entity/Character.cpp 
+	${MKDIR} -p ${OBJECTDIR}/entity
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/entity/Character.o entity/Character.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

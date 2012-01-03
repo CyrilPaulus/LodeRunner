@@ -14,11 +14,17 @@ const char* Block::file[] = {"", "map/wall", "map/cement", "map/ladder",
 
 Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
     this->type = type;
-    image->SetTexture(*imgManager->get(file[type]));
+    if(type != Block::EMPTY)
+        image->SetTexture(*imgManager->get(file[type]));
+    SetBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
 }
 
 void Block::Update(unsigned int time) {
     
+}
+
+bool Block::IsSolid() {
+    return type == Block::CEMENT || type == Block::WALL;
 }
 
 

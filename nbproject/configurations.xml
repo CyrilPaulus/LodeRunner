@@ -15,6 +15,8 @@
       <logicalFolder name="f2" displayName="entity" projectFiles="true">
         <itemPath>entity/Block.cpp</itemPath>
         <itemPath>entity/Block.h</itemPath>
+        <itemPath>entity/Character.cpp</itemPath>
+        <itemPath>entity/Character.h</itemPath>
         <itemPath>entity/Entity.cpp</itemPath>
         <itemPath>entity/Entity.h</itemPath>
         <itemPath>entity/World.cpp</itemPath>
@@ -28,6 +30,7 @@
       </logicalFolder>
       <itemPath>Game.cpp</itemPath>
       <itemPath>Game.h</itemPath>
+      <itemPath>Input.h</itemPath>
       <itemPath>Screen.h</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>

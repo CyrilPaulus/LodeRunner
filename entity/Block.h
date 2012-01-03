@@ -12,14 +12,14 @@
 
 class Block : public Entity {
 public:
-    enum {WALL=1, CEMENT, LADDER, SLIDE, FALSE, ENDLADDER};
+    enum {EMPTY, WALL, CEMENT, LADDER, SLIDE, FALSE, ENDLADDER};
     static const int WIDTH = 36;
     static const int HEIGHT = 30;
     
     Block(ImageManager *imgManager, int type);
     
     void Update(unsigned int time);
-    
+    bool IsSolid();
 private:
     
     static const char* file[];

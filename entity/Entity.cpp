@@ -22,12 +22,16 @@ void Entity::Draw(sf::RenderTarget* rt) {
     rt->Draw(*image);
 }
 
+void Entity::SetColor(sf::Color color) {
+    image->SetColor(color);
+}
+
 sf::Vector2f Entity::GetPosition() {
     return position;
 }
 
-sf::Vector2f Entity::GetBbox() {
-    return bbox;
+sf::FloatRect Entity::GetBbox() {
+    return sf::FloatRect(position, bbox);
 }
 
 sf::Vector2f Entity::GetCenter() {
@@ -46,5 +50,6 @@ void Entity::SetPosition(sf::Vector2f position) {
     this->position = position;
     image->SetPosition(position);
 }
+
 
 
