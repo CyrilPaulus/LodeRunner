@@ -122,6 +122,7 @@ void World::LoadFromFile(char* filename) {
             else if (value == 8) {
                 Character* en = new Character(imgManager, this);
                 en->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+                en->SetSpeed(sf::Vector2f(75, 75));
                 enemies.push_back(en);
             } else if (value == 7) {
                 Goal* g = new Goal(imgManager);

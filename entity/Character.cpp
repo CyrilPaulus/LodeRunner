@@ -24,30 +24,43 @@ void Character::Update(unsigned int frametime, Input input) {
     Block* ladder = world->GetCollidingLadder(GetBbox());
     
     if(!isFalling) {
-        if(input.Left)
+        if(input.Left && !input.Up && !input.Down)
             direction -= sf::Vector2f(speed.x, 0);
 
-        if(input.Right)
+        if(input.Right && !input.Up && !input.Down)
             direction += sf::Vector2f(speed.x, 0);
         
         if(input.Up && ladder) {
             canFall = false;
             direction -= sf::Vector2f(0, speed.y);
-            SetPosition(sf::Vector2f(ladder->GetPosition().x + 0.5 * (Block::WIDTH - bbox.x) ,GetPosition().y ));            
+            int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
+            if(deltaX > 0)
+                direction += sf::Vector2f(speed.x, 0);                
+            else if(deltaX < 0)
+                direction -= sf::Vector2f(speed.x, 0);
         }
         
         if(input.Down && ladder) {
             canFall = false;
             direction += sf::Vector2f(0, speed.y);
-            SetPosition(sf::Vector2f(ladder->GetPosition().x + 0.5 * (Block::WIDTH - bbox.x) ,GetPosition().y ));
+            int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
+            if(deltaX > 0)
+                direction += sf::Vector2f(speed.x, 0);                
+            else if(deltaX < 0)
+                direction -= sf::Vector2f(speed.x, 0);
         }
       
     }
     
 
     if ((rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 3 && !input.Down) || ladder) {
-        if (rope)
-            SetPosition(sf::Vector2f(GetPosition().x, rope->GetPosition().y));
+        if (rope && !ladder) {
+            int deltaY = rope->GetPosition().y - GetPosition().y;
+            if(deltaY < 0)
+                direction += sf::Vector2f(0, speed.y);
+             else if(deltaY > 0)
+                 direction -= sf::Vector2f(0, speed.y);            
+        }
         canFall = false;
         isFalling = false;
     }
@@ -112,4 +125,8 @@ void Character::Update(unsigned int frametime, Input input) {
     }  
    
   
+}
+
+void Character::SetSpeed(sf::Vector2f speed) {
+    this->speed = speed;
 }

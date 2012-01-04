@@ -20,7 +20,7 @@ class Character : public Entity {
 public:
     Character(ImageManager* imgManager, World *world);
     void Update(unsigned int frametime, Input input);
-    
+    void SetSpeed(sf::Vector2f speed);
 private:
     sf::Vector2f speed; 
     bool moveX;
