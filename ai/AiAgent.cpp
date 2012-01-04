@@ -5,6 +5,7 @@
  * Created on January 4, 2012, 11:15 AM
  */
 
+
 #include "AiAgent.h"
 #include <set>
 #include <iostream>
@@ -104,4 +105,35 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
         delete(*it);
     
     return result;
+}
+
+Input AiAgent::GenerateInput(Character* x, Character* target) {
+    Input rtn;
+    int x0 = x->GetPosition().x / Block::WIDTH;
+    int y0 = x->GetPosition().y / Block::HEIGHT;
+    
+    int x1 = target->GetPosition().x / Block::WIDTH;
+    int y1 = target->GetPosition().y / Block::HEIGHT;
+    
+    std::list<Block*>path = ComputePath(x0, y0, x1, y1);
+    if(path.size() > 1 )
+        path.pop_front();
+    
+    if(path.size() != 0) {
+        Block* first = path.front();
+        if(first->GetPosition().x + 0.5 * Block::WIDTH < x->GetPosition().x + 0.5 * x->GetBbox().Width)
+            rtn.Left = true;        
+        
+        if(first->GetPosition().x + 0.5 * Block::WIDTH > x->GetPosition().x + 0.5 * x->GetBbox().Width)
+            rtn.Right = true;     
+        
+        if(first->GetPosition().y < x->GetPosition().y)
+            rtn.Up = true;
+        
+        if(first->GetPosition().y> x->GetPosition().y)
+            rtn.Down = true;  
+        
+    }
+    
+    return rtn;
 }

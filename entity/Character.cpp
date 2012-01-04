@@ -61,7 +61,7 @@ void Character::Update(unsigned int frametime, Input input) {
         if(position.x < 0)
             SetPosition(sf::Vector2f(0, position.y));
         
-        if(position.x > world->GetSize().x)
+        if(position.x + bbox.x >= world->GetSize().x)
             SetPosition(sf::Vector2f(world->GetSize().x - bbox.x, position.y));
 
         Block *b = world->GetCollidingSolid(GetBbox());
@@ -87,7 +87,7 @@ void Character::Update(unsigned int frametime, Input input) {
         if(position.y < 0)
             SetPosition(sf::Vector2f(position.x, 0));
         
-        if(position.y > world->GetSize().y)
+        if(position.y + bbox.y >= world->GetSize().y)
             SetPosition(sf::Vector2f(0, world->GetSize().y - bbox.y));
 
         Block *b = world->GetCollidingSolid(GetBbox());

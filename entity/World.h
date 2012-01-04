@@ -14,12 +14,10 @@
 #include "../utils/ImageManager.h"
 #include "Block.h"
 #include "Goal.h"
-#include "Character.h"
-#include "../ai/AiAgent.h"
 
 class AiAgent;
-class Character;
-
+#include "../ai/AiAgent.h"
+#include "Character.h"
 
 class World {
 public:

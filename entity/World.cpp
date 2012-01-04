@@ -69,6 +69,10 @@ void World::Update(unsigned int frametime, Input input) {
     }
     player->Update(frametime, input);
     
+    std::vector<Character*>::iterator cit;
+    for(cit = enemies.begin(); cit != enemies.end(); cit++)
+        (*cit)->Update(frametime, ai->GenerateInput(*cit, player));
+    
     std::vector<Goal*>::iterator git;     
     for(git = goals.begin(); git != goals.end(); git++)
         if(player->GetBbox().Intersects((*git)->GetBbox())) {
@@ -84,17 +88,7 @@ void World::Update(unsigned int frametime, Input input) {
                 (*it)->SetActive(true);
     }
     
-    std::list<Block*>neighbours = ai->ComputePath(0,0,player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
-    std::list<Block*>::iterator n;    
-    
-    for(n = neighbours.begin(); n != neighbours.end(); n++){        
-        (*n)->SetColor(sf::Color(0,255,0));
-    }
-    
-    neighbours = GetNeighbors(player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
-    for(n = neighbours.begin(); n != neighbours.end(); n++){        
-        (*n)->SetColor(sf::Color(255,0,0));
-    }
+  
 }
 
 void World::LoadFromFile(char* filename) {
@@ -144,9 +138,11 @@ Block* World::GetCollidingSolid(sf::FloatRect bbox) {
 
     for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
         for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            Block *candidate = blocks[j * width + i];          
-            if (candidate->GetBbox().Intersects(bbox) && candidate->IsSolid() ) {            
-            return candidate;
+            if(i >= 0 && j >= 0 && i < width && j < height) {
+                Block *candidate = blocks[j * width + i];          
+                if (candidate->GetBbox().Intersects(bbox) && candidate->IsSolid() ) {            
+                return candidate;
+            }
         }
     }
     
@@ -157,9 +153,11 @@ Block* World::GetCollidingLadder(sf::FloatRect bbox) {
 
     for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
         for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            Block *candidate = blocks[j * width + i];          
-            if (candidate->GetBbox().Intersects(bbox) && candidate->IsLadder() ) {            
-            return candidate;
+            if(i >= 0 && j >= 0 && i < width && j < height) {
+                Block *candidate = blocks[j * width + i];          
+                if (candidate->GetBbox().Intersects(bbox) && candidate->IsLadder() ) {            
+                return candidate;
+            }
         }
     }
     
@@ -170,9 +168,11 @@ Block* World::GetCollidingRope(sf::FloatRect bbox) {
 
     for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
         for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            Block *candidate = blocks[j * width + i];          
-            if (candidate->GetBbox().Intersects(bbox) && candidate->IsRope() ) {            
-            return candidate;
+            if(i >= 0 && j >= 0 && i < width && j < height) {
+                Block *candidate = blocks[j * width + i];          
+                if (candidate->GetBbox().Intersects(bbox) && candidate->IsRope() ) {            
+                return candidate;
+            }
         }
     }
     

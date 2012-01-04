@@ -9,12 +9,16 @@
 #define	AIAGENT_H
 
 #include <list>
+#include "../Input.h"
+#include "../entity/Character.h"
+class World;
 #include "../entity/World.h"
 
 class AiAgent {
 public:
     AiAgent(World *w);
     std::list<Block*> ComputePath(int x0, int y0, int x1, int y1);   
+    Input GenerateInput(Character* x, Character* target);
     virtual ~AiAgent();
 private:
     World* world;

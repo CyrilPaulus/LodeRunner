@@ -9,8 +9,12 @@
 #define	CHARACTER_H
 #include "Entity.h"
 #include "../Input.h"
-#include "World.h"
+
+class Character;
 class World;
+
+#include "World.h"
+
 
 class Character : public Entity {
 public:
