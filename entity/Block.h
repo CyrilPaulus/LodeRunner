@@ -25,11 +25,13 @@ public:
     bool IsRope();
     void SetActive(bool active);
     int GetType();
+    
 private:
     
     static const char* file[];
     int type;
     bool active;
+    float timer;
 };
 
 #endif	/* BLOCK_H */

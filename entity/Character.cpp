@@ -18,7 +18,25 @@ Character::Character(ImageManager* imgManager, World *w) : Entity(imgManager) {
 }
 
 void Character::Update(unsigned int frametime, Input input) {
+    
+    int x0 = position.x / Block::WIDTH;
+    int y0 = position.y / Block::HEIGHT;
     float seconds = frametime / (float)1000;
+    
+    if(input.LeftCarve) {
+        Block* b = world->GetBlock(x0 - 1, y0 + 1);
+        Block* c = world->GetBlock(x0 - 1, y0 );
+        if(b && b->GetType() == Block::WALL && !c->IsSolid() && !c->IsLadder() && !c->IsRope())
+            b->SetActive(false);
+    }
+    
+    if(input.RightCarve) {
+        Block* b = world->GetBlock(x0 + 1, y0 + 1);
+        Block* c = world->GetBlock(x0 + 1, y0);
+        if(b && b->GetType() == Block::WALL && !c->IsSolid() && !c->IsLadder() && !c->IsRope())
+            b->SetActive(false);
+    }
+    
     sf::Vector2f direction = sf::Vector2f(0, 0);
     Block* rope = world->GetCollidingRope(GetBbox());
     Block* ladder = world->GetCollidingLadder(GetBbox());
@@ -101,7 +119,7 @@ void Character::Update(unsigned int frametime, Input input) {
             SetPosition(sf::Vector2f(position.x, 0));
         
         if(position.y + bbox.y >= world->GetSize().y)
-            SetPosition(sf::Vector2f(0, world->GetSize().y - bbox.y));
+            SetPosition(sf::Vector2f(position.x, world->GetSize().y - bbox.y));
 
         Block *b = world->GetCollidingSolid(GetBbox());
         if (b != NULL) {

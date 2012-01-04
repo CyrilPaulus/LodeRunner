@@ -14,13 +14,15 @@ struct Input {
   bool Right;
   bool Up;
   bool Down;
+  bool LeftCarve;
+  bool RightCarve;
 
   Input() {
-    Up = Down = Left = Right = false;
+    Up = Down = Left = Right = RightCarve = LeftCarve = false;
   }
 
   bool operator==(const Input& in) {
-    return (Up == in.Up && Down == in.Down && Right == in.Right && Left == in.Left);
+    return (Up == in.Up && Down == in.Down && Right == in.Right && Left == in.Left && LeftCarve == in.LeftCarve && RightCarve == in.RightCarve);
   }
 
   Input& operator=(const Input& rhs) {
@@ -28,6 +30,8 @@ struct Input {
     Down = rhs.Down;
     Left = rhs.Left;
     Right = rhs.Right;
+    LeftCarve = rhs.LeftCarve;
+    RightCarve = rhs.RightCarve;
     return *this;
   }
 };

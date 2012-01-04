@@ -55,6 +55,8 @@ void Game::Update(unsigned int frametime) {
     input.Right = sf::Keyboard::IsKeyPressed(sf::Keyboard::Right);
     input.Up = sf::Keyboard::IsKeyPressed(sf::Keyboard::Up);
     input.Down = sf::Keyboard::IsKeyPressed(sf::Keyboard::Down);
+    input.LeftCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::A);
+    input.RightCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::Z);
     
     world->Update(frametime, input);
 

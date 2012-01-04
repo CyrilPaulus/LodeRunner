@@ -21,9 +21,18 @@ Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
         active = false;
     else
         active = true;
+    timer = 0;
 }
 
 void Block::Update(unsigned int time) {
+    if(!active && type == Block::WALL){
+        timer += time / (float)1000;
+        if(timer >= 3){
+            timer = 0;
+            active = true;
+        }
+            
+    }
     
 }
 
@@ -37,7 +46,7 @@ void Block::Draw(sf::RenderTarget* rt) {
 }
 
 bool Block::IsSolid() {
-    return type == Block::CEMENT || type == Block::WALL;
+    return active && (type == Block::CEMENT || type == Block::WALL);
 }
 
 bool Block::IsLadder() {
