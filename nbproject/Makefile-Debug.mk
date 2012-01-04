@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/utils/ImageManager.o \
 	${OBJECTDIR}/entity/Goal.o \
+	${OBJECTDIR}/ai/AiAgent.o \
 	${OBJECTDIR}/Game.o \
 	${OBJECTDIR}/entity/World.o \
 	${OBJECTDIR}/entity/Block.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/entity/Goal.o: entity/Goal.cpp
 	${MKDIR} -p ${OBJECTDIR}/entity
 	${RM} $@.d
 	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/entity/Goal.o entity/Goal.cpp
+
+${OBJECTDIR}/ai/AiAgent.o: ai/AiAgent.cpp 
+	${MKDIR} -p ${OBJECTDIR}/ai
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/ai/AiAgent.o ai/AiAgent.cpp
 
 ${OBJECTDIR}/Game.o: Game.cpp 
 	${MKDIR} -p ${OBJECTDIR}

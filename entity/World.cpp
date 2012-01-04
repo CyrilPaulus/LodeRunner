@@ -16,12 +16,14 @@ World::World(ImageManager *imgManager) {
     width = 0;
     height = 0;
     completed = false;
+    ai = new AiAgent(this);
 }
 
 
 World::~World() {
     Clean();    
     delete player;
+    delete ai;
 }
 
 void World::Clean() {
@@ -82,8 +84,14 @@ void World::Update(unsigned int frametime, Input input) {
                 (*it)->SetActive(true);
     }
     
-    std::list<Block*>neighbours = GetNeighbors(player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
-    std::list<Block*>::iterator n;
+    std::list<Block*>neighbours = ai->ComputePath(0,0,player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
+    std::list<Block*>::iterator n;    
+    
+    for(n = neighbours.begin(); n != neighbours.end(); n++){        
+        (*n)->SetColor(sf::Color(0,255,0));
+    }
+    
+    neighbours = GetNeighbors(player->GetPosition().x / Block::WIDTH, player->GetPosition().y / Block::HEIGHT);
     for(n = neighbours.begin(); n != neighbours.end(); n++){        
         (*n)->SetColor(sf::Color(255,0,0));
     }
@@ -190,14 +198,14 @@ std::list<Block*> World::GetNeighbors(int x, int y) {
     Block* current = blocks[y * width + x];
     bool isSolidUnderCurrent = false;
     if (y + 1 < height ) 
-        isSolidUnderCurrent = blocks[(y+1) * width + x]->IsSolid();
+        isSolidUnderCurrent = blocks[(y+1) * width + x]->IsSolid() || blocks[(y+1) * width + x]->IsLadder();
     
     int xs[] = {x, x - 1, x + 1, x};
     int ys[] = {y - 1, y, y, y + 1};
 
    
     for (int i = 0; i < 4; i++) {
-        std::cout << xs[i] << " " << ys[i] << " " << width << " " << height << std::endl;
+       
         if (xs[i] < 0 || xs[i] >= width || ys[i] < 0 || ys[i] >= height)
             continue;
                  
@@ -205,9 +213,9 @@ std::list<Block*> World::GetNeighbors(int x, int y) {
 
         if ((candidate->IsLadder() || candidate->IsRope()) && (i == 1 || i == 2))
             value.push_back(candidate);
-        else if (candidate->GetType() == Block::EMPTY && (i == 1 || i == 2) &&
-                (current->IsLadder() || current->IsRope() || isSolidUnderCurrent))
-            value.push_back(candidate);
+        else if (!candidate->IsSolid() && (i == 1 || i == 2) &&
+                (current->IsLadder() || current->IsRope() || isSolidUnderCurrent)) 
+            value.push_back(candidate);       
         else if (!candidate->IsSolid() && i == 3)
             value.push_back(candidate);
         else if (!(candidate->IsSolid()) && i == 0
@@ -215,4 +223,11 @@ std::list<Block*> World::GetNeighbors(int x, int y) {
             value.push_back(candidate);
     }
     return value;
+}
+
+Block* World::GetBlock(int x, int y) {
+    if(x >= 0 && x < width && y >= 0 && y < height)
+        return blocks[y*width + x];
+    else
+        return NULL;
 }

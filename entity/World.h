@@ -15,12 +15,16 @@
 #include "Block.h"
 #include "Goal.h"
 #include "Character.h"
+#include "../ai/AiAgent.h"
 
+class AiAgent;
 class Character;
+
 
 class World {
 public:
     World(ImageManager *imgManager);
+    virtual ~World();
     
     void Update(unsigned int frametime, Input in);
     void Draw(sf::RenderTarget* rt);
@@ -29,7 +33,9 @@ public:
     Block* GetCollidingRope(sf::FloatRect bbox);
     sf::Vector2f GetSize();
     
-    virtual ~World();
+    Block* GetBlock(int x, int y);
+    std::list<Block*> GetNeighbors(int x, int y);
+    
     
     void LoadFromFile(char* filename);
 private:
@@ -42,9 +48,10 @@ private:
     std::vector<Goal*> goals;
     std::vector<Character*> enemies;
     Character* player;
-    
+    AiAgent* ai;
     bool IsUnderRope(int x, int y);
-    std::list<Block*> GetNeighbors(int x, int y);
+    
+    
     
     void Clean();
     
