@@ -15,7 +15,7 @@
  */
 int main(int argc, char** argv) {
     //Init ImageManager
-    ImageManagerSingleton::GetInstance();
+    ImageManager::getInstance();
     
     std::vector<Screen*> screens;       
     int screen = Screen::GAME;

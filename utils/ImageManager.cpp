@@ -8,13 +8,13 @@
 #include "ImageManager.h"
 #include <iostream>
 
-ImageManager::~ImageManager() {
+CImageManager::~CImageManager() {
     std::map<std::string, sf::Texture*>::iterator i;
     for(i = imageSet.begin(); i != imageSet.end(); i++) 
         delete i->second;
 }
 
-const sf::Texture *ImageManager::get(std::string name) {
+const sf::Texture *CImageManager::get(std::string name) {
     sf::Texture *value = imageSet[name];
     if(value != NULL)
         return value;

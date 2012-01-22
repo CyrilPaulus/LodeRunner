@@ -12,13 +12,13 @@ template <typename T>
 class Singleton {
     
 public:
-    static T *GetInstance(void) {
+    static T *getInstance(void) {
         if(instance == 0)
             instance = new T;
         return instance;
     }
     
-    static void Kill(void) {
+    static void kill(void) {
         if(instance != 0) {
             delete instance;
             instance = 0;

@@ -9,7 +9,7 @@
 #include "Block.h"
 
 Character::Character(World *w) : Entity() {
-    image->SetTexture(*ImageManagerSingleton::GetInstance()->get("them"));
+    image->SetTexture(*ImageManager::getInstance()->get("them"));
     SetBBox(sf::Vector2f(24, 30));
     speed = sf::Vector2f(100,100);
     isFalling = false;

@@ -13,10 +13,10 @@
 #include <string>
 #include "Singleton.h"
 
-class ImageManager{
+class CImageManager{
     
 public:
-    virtual ~ImageManager();
+    virtual ~CImageManager();
     const sf::Texture *get(std::string);
     
 private:
@@ -24,7 +24,7 @@ private:
 
 };
 
-typedef Singleton<ImageManager> ImageManagerSingleton;
+typedef Singleton<CImageManager> ImageManager;
 
 #endif	/* IMAGEMANAGER_H */
 
