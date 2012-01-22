@@ -7,7 +7,7 @@
 
 #include "Entity.h"
 
-Entity::Entity(ImageManager *imgManager) {
+Entity::Entity() {
     image = new sf::Sprite();
     position = sf::Vector2f(0,0);
     center = sf::Vector2f(0,0);

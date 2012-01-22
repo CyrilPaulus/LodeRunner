@@ -16,7 +16,7 @@ public:
     static const int WIDTH = 36;
     static const int HEIGHT = 30;
     
-    Block(ImageManager *imgManager, int type);
+    Block(int type);
     
     void Update(unsigned int time);
     void Draw(sf::RenderTarget* rt);

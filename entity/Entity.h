@@ -12,7 +12,7 @@
 
 class Entity {
 public:
-    Entity(ImageManager *imgManager);
+    Entity();
     virtual ~Entity();
     
     void Draw(sf::RenderTarget *rt);

@@ -8,12 +8,13 @@
 #include "Character.h"
 #include "Block.h"
 
-Character::Character(ImageManager* imgManager, World *w) : Entity(imgManager) {
-    image->SetTexture(*imgManager->get("them"));
+Character::Character(World *w) : Entity() {
+    image->SetTexture(*ImageManagerSingleton::GetInstance()->get("them"));
     SetBBox(sf::Vector2f(24, 30));
     speed = sf::Vector2f(100,100);
     isFalling = false;
     canFall = true;
+    canRope = true;
     world = w;
 }
 
@@ -23,6 +24,7 @@ void Character::Update(unsigned int frametime, Input input) {
     int y0 = position.y / Block::HEIGHT;
     float seconds = frametime / (float)1000;
     
+    //Carve
     if(input.LeftCarve) {
         Block* b = world->GetBlock(x0 - 1, y0 + 1);
         Block* c = world->GetBlock(x0 - 1, y0 );
@@ -41,14 +43,17 @@ void Character::Update(unsigned int frametime, Input input) {
     Block* rope = world->GetCollidingRope(GetBbox());
     Block* ladder = world->GetCollidingLadder(GetBbox());
     
+    
+    //Left Right - Up Down (ladder)
     if(!isFalling) {
         if(input.Left && !input.Up && !input.Down)
             direction -= sf::Vector2f(speed.x, 0);
 
         if(input.Right && !input.Up && !input.Down)
-            direction += sf::Vector2f(speed.x, 0);
-        
-        if(input.Up && ladder) {
+            direction += sf::Vector2f(speed.x, 0);  
+    }
+
+    if(input.Up && ladder) {
             canFall = false;
             direction -= sf::Vector2f(0, speed.y);
             int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
@@ -67,25 +72,28 @@ void Character::Update(unsigned int frametime, Input input) {
             else if(deltaX < 0)
                 direction -= sf::Vector2f(speed.x, 0);
         }
-      
-    }
-    
 
-    if ((rope && GetBbox().Top >= rope->GetBbox().Top && GetBbox().Top <= rope->GetBbox().Top + 3 && !input.Down) || ladder) {
-        if (rope && !ladder) {
-            int deltaY = rope->GetPosition().y - GetPosition().y;
-            if(deltaY < 0)
-                direction += sf::Vector2f(0, speed.y);
-             else if(deltaY > 0)
-                 direction -= sf::Vector2f(0, speed.y);            
+    //Align to rope
+    if ((rope && position.y >= rope->GetPosition().y && position.y <= rope->GetPosition().y + 10)) {
+        if (canRope) {
+            if (rope) {
+                int deltaY = rope->GetPosition().y - GetPosition().y;
+                if (abs(deltaY) < speed.y * seconds)
+                    SetPosition(sf::Vector2f(position.x, rope->GetPosition().y));
+                else if (deltaY > 0)
+                    direction += sf::Vector2f(0, speed.y);
+                else if (deltaY < 0)
+                    direction -= sf::Vector2f(0, speed.y);
+
+            }
+            canFall = false;
+            isFalling = false;
         }
-        canFall = false;
-        isFalling = false;
+    } else {
+        canRope = true;
     }
 
-    if(input.Down && !canFall && rope)
-            canFall = true;   
-    
+    //Update X pos, and solve collisions
     if (direction.x != 0) {
         SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
         
@@ -104,13 +112,19 @@ void Character::Update(unsigned int frametime, Input input) {
         }
     }
     
+        
+    if(input.Down && !canFall && rope) {
+        canRope = false;
+        canFall = true;  
+    }    
+    
     if(canFall) {
         isFalling = true;
         direction += sf::Vector2f(0, speed.y);        
-    }
+    }     
     
     if(!ladder && (!rope || (position.x != rope->GetBbox().Top)))
-        canFall = true;    
+        canFall = true;   
     
     if (direction.y != 0) {
         SetPosition(sf::Vector2f(position.x, position.y + direction.y * seconds));
@@ -133,12 +147,13 @@ void Character::Update(unsigned int frametime, Input input) {
         
         //Special case to walk on ladder
         ladder = world->GetCollidingLadder(GetBbox());
-        if(ladder != NULL && direction.y > 0 && isFalling && canFall && ladder->GetPosition().y > position.y) {
+        if(ladder && direction.y > 0  && isFalling &&canFall && ladder->GetPosition().y > position.y) {
             if(!input.Down)
                 SetPosition(sf::Vector2f(position.x, ladder->GetBbox().Top - GetBbox().Height));            
             isFalling = false;            
         }
         
+    
         
     }  
    

@@ -31,7 +31,6 @@ private:
     void OnClose();
     
     bool running;
-    ImageManager imgManager;
     Ticker* ticker;
     
     World* world;

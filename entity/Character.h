@@ -18,7 +18,7 @@ class World;
 
 class Character : public Entity {
 public:
-    Character(ImageManager* imgManager, World *world);
+    Character(World *world);
     void Update(unsigned int frametime, Input input);
     void SetSpeed(sf::Vector2f speed);
 private:
@@ -27,6 +27,7 @@ private:
     bool moveY;
     bool isFalling;
     bool canFall;
+    bool canRope;
     World *world;
 };
 

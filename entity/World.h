@@ -21,7 +21,7 @@ class AiAgent;
 
 class World {
 public:
-    World(ImageManager *imgManager);
+    World();
     virtual ~World();
     
     void Update(unsigned int frametime, Input in);
@@ -41,7 +41,6 @@ private:
     int height;
     bool completed;
     
-    ImageManager *imgManager;
     std::vector<Block*> blocks;
     std::vector<Goal*> goals;
     std::vector<Character*> enemies;

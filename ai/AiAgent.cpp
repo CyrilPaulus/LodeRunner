@@ -117,8 +117,8 @@ Input AiAgent::GenerateInput(Character* x, Character* target) {
     
     std::list<Block*>path = ComputePath(x0, y0, x1, y1);
     
-    for(std::list<Block*>::iterator i = path.begin(); i != path.end(); i++)
-        (*i)->SetColor(sf::Color(abs(x0-x1)*10,abs(y1 - y0)*10,255));
+    /*for(std::list<Block*>::iterator i = path.begin(); i != path.end(); i++)
+        (*i)->SetColor(sf::Color(abs(x0-x1)*10,abs(y1 - y0)*10,255));*/
     
     if(path.size() > 1 )
         path.pop_front();

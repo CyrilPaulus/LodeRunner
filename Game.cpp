@@ -15,7 +15,7 @@ Game::Game() {
     ticker = new Ticker();
     ticker->setRate(50);
     
-    world = new World(&imgManager);
+    world = new World();
 }
 
 Game::~Game() {

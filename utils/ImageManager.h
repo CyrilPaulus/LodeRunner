@@ -11,8 +11,10 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 #include <string>
+#include "Singleton.h"
 
-class ImageManager {
+class ImageManager{
+    
 public:
     virtual ~ImageManager();
     const sf::Texture *get(std::string);
@@ -21,6 +23,8 @@ private:
     std::map<std::string, sf::Texture*> imageSet;
 
 };
+
+typedef Singleton<ImageManager> ImageManagerSingleton;
 
 #endif	/* IMAGEMANAGER_H */
 

@@ -12,10 +12,10 @@
 const char* Block::file[] = {"map/empty", "map/wall", "map/cement", "map/ladder", 
                                 "map/slide", "map/wall", "map/ladder"};
 
-Block::Block(ImageManager* imgManager, int type) : Entity(imgManager){
+Block::Block(int type) : Entity(){
     this->type = type;
     //if(type != Block::EMPTY)
-        image->SetTexture(*imgManager->get(file[type]));
+        image->SetTexture(*ImageManagerSingleton::GetInstance()->get(file[type]));
     SetBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
     if(type == Block::ENDLADDER)
         active = false;

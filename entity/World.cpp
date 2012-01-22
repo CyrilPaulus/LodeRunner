@@ -9,9 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 
-World::World(ImageManager *imgManager) {
-    this->imgManager = imgManager;
-    player = new Character(imgManager, this);
+World::World() {    
+    player = new Character(this);
     player->SetColor(sf::Color(0,0,255));
     width = 0;
     height = 0;
@@ -39,6 +38,8 @@ void World::Clean() {
     for(enm = enemies.begin(); enm != enemies.end(); enm++)
         free(*enm);
     
+ 
+    
     blocks.empty();
     goals.empty();
     completed = false;
@@ -56,7 +57,7 @@ void World::Draw(sf::RenderTarget* rt) {
     
     std::vector<Character*>::iterator enm;     
     for(enm = enemies.begin(); enm != enemies.end(); enm++)
-        (*enm)->Draw(rt);
+        (*enm)->Draw(rt);   
     
     player->Draw(rt);
 }
@@ -108,9 +109,9 @@ void World::LoadFromFile(char* filename) {
             //BLOCK
             Block* b = NULL;
             if (value >= 1 && value <= 6)
-                b = new Block(imgManager, value);
+                b = new Block(value);
             else
-                b = new Block(imgManager, Block::EMPTY);
+                b = new Block(Block::EMPTY);
 
             b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
             blocks.push_back(b);
@@ -120,12 +121,12 @@ void World::LoadFromFile(char* filename) {
                 player->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
 
             else if (value == 8) {
-                Character* en = new Character(imgManager, this);
+                Character* en = new Character(this);
                 en->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
                 en->SetSpeed(sf::Vector2f(75, 75));
                 enemies.push_back(en);
             } else if (value == 7) {
-                Goal* g = new Goal(imgManager);
+                Goal* g = new Goal();
                 g->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
                 goals.push_back(g);
             }

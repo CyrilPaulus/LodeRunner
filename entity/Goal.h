@@ -12,7 +12,7 @@
 
 class Goal : public Entity {
 public:
-    Goal(ImageManager* imgManager);
+    Goal();
 private:
 
 };
