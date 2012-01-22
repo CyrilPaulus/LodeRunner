@@ -12,13 +12,13 @@ template <typename T>
 class Singleton {
     
 public:
-    static T *getInstance(void) {
+    static T *getInstance() {
         if(instance == 0)
             instance = new T;
         return instance;
     }
     
-    static void release(void) {
+    static void release() {
         if(instance != 0) {
             delete instance;
             instance = 0;
@@ -26,12 +26,10 @@ public:
     }
     
 protected:
-    Singleton(void) {}
-    ~Singleton(void) {}
+    Singleton() {}
+    ~Singleton() {}
     
-private:
-   Singleton(Singleton const&);
-   Singleton& operator=(Singleton const&);
+private:   
     static T *instance;
 };
 

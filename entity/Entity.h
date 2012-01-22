@@ -29,7 +29,6 @@ public:
 protected:    
     sf::Sprite* image;
     sf::Vector2f position;
-    sf::Vector2f center;
     sf::Vector2f bbox;
 
 };

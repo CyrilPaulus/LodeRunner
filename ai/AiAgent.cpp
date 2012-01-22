@@ -10,12 +10,16 @@
 #include <set>
 #include <iostream>
 
+#include "../entity/World.h"
+
 int distM(int x0, int y0, int x1, int y1) {
     return abs(x0 - x1) + abs (y0 - y1);
 }
 
-AiAgent::AiAgent(World* w) {
+AiAgent::AiAgent(World* w, Character *c) {
     world = w;
+    this->c = c;
+    current = NULL;
 }
 
 AiAgent::~AiAgent() {
@@ -58,7 +62,7 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
         }
         
        if(x->x == x1 && x->y == y1) {
-            while(x != NULL) {
+            while(x->x != x0 || x->y != y0) {
                 result.push_front(x->block);
                 x = x->from;
             }
@@ -107,35 +111,54 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
     return result;
 }
 
-Input AiAgent::GenerateInput(Character* x, Character* target) {
-    Input rtn;
-    int x0 = x->GetPosition().x / Block::WIDTH;
-    int y0 = x->GetPosition().y / Block::HEIGHT;
+Input AiAgent::Update(unsigned int frametime) {
+    float seconds = frametime / (float)1000;
+    timer += seconds;
     
-    int x1 = target->GetPosition().x / Block::WIDTH;
-    int y1 = target->GetPosition().y / Block::HEIGHT;
+    if(timer >= 5) {
+        timer = 0;
+        path.clear();
+    }
     
-    std::list<Block*>path = ComputePath(x0, y0, x1, y1);
     
-    /*for(std::list<Block*>::iterator i = path.begin(); i != path.end(); i++)
-        (*i)->SetColor(sf::Color(abs(x0-x1)*10,abs(y1 - y0)*10,255));*/
     
-    if(path.size() > 1 )
-        path.pop_front();
     
-    if(path.size() != 0) {
+    Input rtn;    
+    
+    if(path.empty()) {      
+
+     int x0 = c->GetPosition().x / Block::WIDTH;
+        int y0 = c->GetPosition().y / Block::HEIGHT;
+
+        int x1 = world->GetPlayer()->GetPosition().x / Block::WIDTH;
+        int y1 = world->GetPlayer()->GetPosition().y / Block::HEIGHT;
+        path = ComputePath(x0, y0, x1, y1);
+        
+    }   
+    
+    if(!path.empty()) {
         Block* first = path.front();
-        if(first->GetPosition().x + 0.5 * Block::WIDTH < x->GetPosition().x + 0.5 * x->GetBbox().Width)
+        
+         if(abs(first->GetPosition().y - c->GetPosition().y) <= c->GetSpeed().y * seconds){
+            c->SetPosition(sf::Vector2f(c->GetPosition().x, first->GetPosition().y));
+        }
+        
+        if(first->GetPosition().x + 0.5 * Block::WIDTH < c->GetPosition().x + 0.5 * c->GetBbox().Width)
             rtn.Left = true;        
         
-        if(first->GetPosition().x + 0.5 * Block::WIDTH > x->GetPosition().x + 0.5 * x->GetBbox().Width)
+        if(first->GetPosition().x + 0.5 * Block::WIDTH > c->GetPosition().x + 0.5 * c->GetBbox().Width)
             rtn.Right = true;     
         
-        if(first->GetPosition().y < x->GetPosition().y)
+        if(first->GetPosition().y + 0.5 * Block::HEIGHT < c->GetPosition().y + 0.5 * c->GetBbox().Height)
             rtn.Up = true;
         
-        if(first->GetPosition().y> x->GetPosition().y)
-            rtn.Down = true;  
+        if(first->GetPosition().y + 0.5 * Block::HEIGHT > c->GetPosition().y + 0.5 * c->GetBbox().Height)
+            rtn.Down = true; 
+   
+        sf::Vector2f dist = c->GetCenter() - first->GetCenter();
+            
+        if (dist.x * dist.x + dist.y * dist.y <= 64)           
+            path.pop_front();  
         
     }
     

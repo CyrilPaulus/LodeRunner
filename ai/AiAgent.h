@@ -11,17 +11,25 @@
 #include <list>
 #include "../Input.h"
 #include "../entity/Character.h"
+#include "../entity/Block.h"
+
 class World;
-#include "../entity/World.h"
+
+
 
 class AiAgent {
 public:
-    AiAgent(World *w);
-    std::list<Block*> ComputePath(int x0, int y0, int x1, int y1);   
-    Input GenerateInput(Character* x, Character* target);
+    AiAgent(World *w, Character *c);    
+    Input Update(unsigned int frametime);
     virtual ~AiAgent();
+    
 private:
     World* world;
+    Character* c;
+    std::list<Block*> ComputePath(int x0, int y0, int x1, int y1);
+    std::list<Block*> path;
+    Block* current;
+    float timer;
      
 };
 

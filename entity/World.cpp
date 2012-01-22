@@ -15,14 +15,15 @@ World::World() {
     width = 0;
     height = 0;
     completed = false;
-    ai = new AiAgent(this);
+    ai = new AiManager(this);
 }
 
 
 World::~World() {
+    delete ai;
     Clean();    
     delete player;
-    delete ai;
+    
 }
 
 void World::Clean() {
@@ -72,7 +73,7 @@ void World::Update(unsigned int frametime, Input input) {
     
     std::vector<Character*>::iterator cit;
     for(cit = enemies.begin(); cit != enemies.end(); cit++)
-        (*cit)->Update(frametime, ai->GenerateInput(*cit, player));
+        (*cit)->Update(frametime, ai->Update((*cit), frametime));
     
     std::vector<Goal*>::iterator git;     
     for(git = goals.begin(); git != goals.end(); git++)
@@ -125,6 +126,7 @@ void World::LoadFromFile(char* filename) {
                 en->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
                 en->SetSpeed(sf::Vector2f(75, 75));
                 enemies.push_back(en);
+                ai->AddAgent(en);
             } else if (value == 7) {
                 Goal* g = new Goal();
                 g->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
@@ -232,4 +234,8 @@ Block* World::GetBlock(int x, int y) {
         return blocks[y*width + x];
     else
         return NULL;
+}
+
+Character* World::GetPlayer() {
+    return player;
 }

@@ -7,7 +7,7 @@
 
 #include "Character.h"
 #include "Block.h"
-
+#include "World.h"
 Character::Character(World *w) : Entity() {
     image->SetTexture(*ImageManager::getInstance()->get("them"));
     SetBBox(sf::Vector2f(24, 30));
@@ -46,14 +46,15 @@ void Character::Update(unsigned int frametime, Input input) {
     
     //Left Right - Up Down (ladder)
     if(!isFalling) {
-        if(input.Left && !input.Up && !input.Down)
+        if(input.Left )
             direction -= sf::Vector2f(speed.x, 0);
 
-        if(input.Right && !input.Up && !input.Down)
+        if(input.Right)
             direction += sf::Vector2f(speed.x, 0);  
     }
 
     if(input.Up && ladder) {
+            direction = sf::Vector2f(0, 0);
             canFall = false;
             direction -= sf::Vector2f(0, speed.y);
             int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
@@ -64,6 +65,7 @@ void Character::Update(unsigned int frametime, Input input) {
         }
         
         if(input.Down && ladder) {
+            direction = sf::Vector2f(0, 0);
             canFall = false;
             direction += sf::Vector2f(0, speed.y);
             int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
@@ -152,14 +154,19 @@ void Character::Update(unsigned int frametime, Input input) {
                 SetPosition(sf::Vector2f(position.x, ladder->GetBbox().Top - GetBbox().Height));            
             isFalling = false;            
         }
-        
+                
+    }
     
-        
-    }  
+    if(direction.y == 0)
+        isFalling = false;
    
   
 }
 
 void Character::SetSpeed(sf::Vector2f speed) {
     this->speed = speed;
+}
+
+sf::Vector2f Character::GetSpeed() {
+    return speed;
 }

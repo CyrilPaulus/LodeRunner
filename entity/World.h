@@ -16,7 +16,7 @@
 #include "Goal.h"
 
 class AiAgent;
-#include "../ai/AiAgent.h"
+#include "../ai/AiManager.h"
 #include "Character.h"
 
 class World {
@@ -33,6 +33,7 @@ public:
     
     Block* GetBlock(int x, int y);
     std::list<Block*> GetNeighbors(int x, int y);
+    Character* GetPlayer();
     
     
     void LoadFromFile(char* filename);
@@ -45,7 +46,7 @@ private:
     std::vector<Goal*> goals;
     std::vector<Character*> enemies;
     Character* player;
-    AiAgent* ai;
+    AiManager* ai;
     bool IsUnderRope(int x, int y);
     
     

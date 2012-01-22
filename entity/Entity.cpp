@@ -10,7 +10,6 @@
 Entity::Entity() {
     image = new sf::Sprite();
     position = sf::Vector2f(0,0);
-    center = sf::Vector2f(0,0);
     bbox = sf::Vector2f(0,0);
 }
 
@@ -35,15 +34,11 @@ sf::FloatRect Entity::GetBbox() {
 }
 
 sf::Vector2f Entity::GetCenter() {
-    return center;
+    return position + sf::Vector2f(bbox.x / 2, bbox.y / 2);
 }
 
 void Entity::SetBBox(sf::Vector2f bbox) {
     this->bbox = bbox;
-}
-
-void Entity::SetCenter(sf::Vector2f center) {
-    this->center = center;
 }
 
 void Entity::SetPosition(sf::Vector2f position) {

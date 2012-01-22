@@ -15,6 +15,8 @@
       <logicalFolder name="f3" displayName="ai" projectFiles="true">
         <itemPath>ai/AiAgent.cpp</itemPath>
         <itemPath>ai/AiAgent.h</itemPath>
+        <itemPath>ai/AiManager.cpp</itemPath>
+        <itemPath>ai/AiManager.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="entity" projectFiles="true">
         <itemPath>entity/Block.cpp</itemPath>
