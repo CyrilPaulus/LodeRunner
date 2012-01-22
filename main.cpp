@@ -30,6 +30,7 @@ int main(int argc, char** argv) {
         screen = screens[screen]->Run(&app);
     }
     
+    ImageManager::release();
     return EXIT_SUCCESS;
 }
 

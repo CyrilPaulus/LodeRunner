@@ -18,7 +18,7 @@ public:
         return instance;
     }
     
-    static void kill(void) {
+    static void release(void) {
         if(instance != 0) {
             delete instance;
             instance = 0;
