@@ -48,6 +48,7 @@ private:
     Character* player;
     AiManager* ai;
     bool IsUnderRope(int x, int y);
+    void PushBlock(int x, int y, int type);
     
     
     
