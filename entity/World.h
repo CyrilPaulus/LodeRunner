@@ -29,6 +29,8 @@ public:
     Block* GetCollidingSolid(sf::FloatRect bbox);
     Block* GetCollidingLadder(sf::FloatRect bbox);
     Block* GetCollidingRope(sf::FloatRect bbox);
+    Character* GetCollidingEnnemy(sf::FloatRect bbox);
+    
     sf::Vector2f GetSize();
     
     Block* GetBlock(int x, int y);

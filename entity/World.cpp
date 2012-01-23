@@ -153,6 +153,15 @@ Block* World::GetCollidingSolid(sf::FloatRect bbox) {
     return NULL;
 }
 
+Character* World::GetCollidingEnnemy(sf::FloatRect bbox) {
+std::vector<Character*>::iterator enm;
+    for (enm = enemies.begin(); enm != enemies.end(); enm++)
+        if((*enm)->GetBbox().Intersects(bbox))
+            return *enm;
+    
+    return NULL;
+}
+
 Block* World::GetCollidingLadder(sf::FloatRect bbox) {
 
     for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
