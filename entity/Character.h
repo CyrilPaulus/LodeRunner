@@ -19,6 +19,8 @@ public:
     void Update(unsigned int frametime, Input input);
     void SetSpeed(sf::Vector2f speed);
     sf::Vector2f GetSpeed();
+    void Align(sf::Vector2f pos);
+    
 private:
     sf::Vector2f speed; 
     bool moveX;

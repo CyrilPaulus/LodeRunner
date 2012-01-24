@@ -46,10 +46,10 @@ void Character::Update(unsigned int frametime, Input input) {
     
     //Left Right - Up Down (ladder)
     if(!isFalling) {
-        if(input.Left && !input.Down && !input.Up)
+        if(input.Left)
             direction -= sf::Vector2f(speed.x, 0);
 
-        if(input.Right && !input.Down && !input.Up)
+        if(input.Right)
             direction += sf::Vector2f(speed.x, 0);  
     }
 
@@ -99,7 +99,16 @@ void Character::Update(unsigned int frametime, Input input) {
     if (direction.x != 0) {
         SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
         
-        Entity *b = world->GetCollidingSolid(GetBbox());
+        
+        Entity * b = world->GetCollidingEnnemy(GetBbox());
+        if (b != NULL && b != this && b != world->GetPlayer() && this != world->GetPlayer()) {
+            if (b->GetPosition().x < GetPosition().x)
+                SetPosition(GetPosition() + sf::Vector2f(speed.x / 2 * seconds, 0));                    
+            else 
+               SetPosition(GetPosition() - sf::Vector2f(speed.x / 2 * seconds, 0));            
+        }
+        
+        b = world->GetCollidingSolid(GetBbox());
         if (b != NULL) {
             if (direction.x < 0)
                 SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
@@ -107,13 +116,7 @@ void Character::Update(unsigned int frametime, Input input) {
                 SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
         }
         
-        b = world->GetCollidingEnnemy(GetBbox());
-        if (b != NULL && b != this) {
-            if (direction.x < 0)
-                SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
-            else
-                SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
-        }
+        
     }
     
         
@@ -143,7 +146,7 @@ void Character::Update(unsigned int frametime, Input input) {
             }
         }
         
-        b = world->GetCollidingEnnemy(GetBbox());
+        /*b = world->GetCollidingEnnemy(GetBbox());
         if (b != NULL && b != this) {
             if (direction.y < 0)
                 SetPosition(sf::Vector2f(position.x, b->GetBbox().Top + b->GetBbox().Height));
@@ -151,7 +154,7 @@ void Character::Update(unsigned int frametime, Input input) {
                 SetPosition(sf::Vector2f(position.x, b->GetBbox().Top - GetBbox().Height));
                 isFalling = false;
             }
-        }
+        }*/
         
         //Special case to walk on ladder
         ladder = world->GetCollidingLadder(GetBbox());
@@ -174,4 +177,11 @@ void Character::SetSpeed(sf::Vector2f speed) {
 
 sf::Vector2f Character::GetSpeed() {
     return speed;
+}
+
+void Character::Align(sf::Vector2f pos) {
+    if(!isFalling)
+        SetPosition(pos);
+    else
+        SetPosition(sf::Vector2f(pos.x, GetPosition().y));
 }

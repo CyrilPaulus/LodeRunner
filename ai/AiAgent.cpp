@@ -118,10 +118,7 @@ Input AiAgent::Update(unsigned int frametime) {
     if(timer >= 5) {
         timer = 0;
         path.clear();
-    }
-    
-    
-    
+    }    
     
     Input rtn;    
     
@@ -140,7 +137,7 @@ Input AiAgent::Update(unsigned int frametime) {
         Block* first = path.front();
         
          if(abs(first->GetPosition().y - c->GetPosition().y) <= c->GetSpeed().y * seconds){
-            c->SetPosition(sf::Vector2f(c->GetPosition().x, first->GetPosition().y));
+            c->Align(sf::Vector2f(c->GetPosition().x, first->GetPosition().y));            
         }
         
         if(first->GetPosition().x + 0.5 * Block::WIDTH < c->GetPosition().x + 0.5 * c->GetBbox().Width)
