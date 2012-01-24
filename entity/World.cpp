@@ -101,13 +101,7 @@ void World::LoadFromFile(char* filename) {
     }
 
     fscanf(f, "d%dx%d\n", &width, &height);
-<<<<<<< HEAD
-    
-    for(int i = 0 ; i < width; i++)
-        
-    for (int j = 0; j < height; j++) {
-        for (int i = 0; i < width; i++) {
-=======
+
     width += 2;
     height += 2;
     for (int i = 0; i < width; i++)
@@ -117,7 +111,7 @@ void World::LoadFromFile(char* filename) {
         PushBlock(0, j, Block::CEMENT);
 
         for (int i = 1; i < width - 1; i++) {
->>>>>>> 35ea7e192409c025ef68b83f402d12ff51460ebf
+
             int value;
             fscanf(f, "%1d", &value);
 
