@@ -8,7 +8,6 @@
 #ifndef GOAL_H
 #define	GOAL_H
 #include "Entity.h"
-#include "../utils/ImageManager.h"
 
 class Goal : public Entity {
 public:

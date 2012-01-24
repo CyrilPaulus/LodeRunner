@@ -7,7 +7,9 @@
 
 #include <iostream>
 #include "Game.h"
-#include "entity/Entity.h"
+
+#include "entity/Block.h"
+#include "entity/World.h"
 
 
 Game::Game() {

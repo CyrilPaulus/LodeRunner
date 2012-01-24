@@ -8,11 +8,11 @@
 #ifndef AIMANAGER_H
 #define	AIMANAGER_H
 #include <map>
-#include "AiAgent.h"
 
 class World;
 class Character;
 class Input;
+class AiAgent;
 
 class AiManager {
 public:

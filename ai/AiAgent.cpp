@@ -11,6 +11,8 @@
 #include <iostream>
 
 #include "../entity/World.h"
+#include "../entity/Character.h"
+#include "../entity/Block.h"
 
 int distM(int x0, int y0, int x1, int y1) {
     return abs(x0 - x1) + abs (y0 - y1);

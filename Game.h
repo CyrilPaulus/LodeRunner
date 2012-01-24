@@ -11,7 +11,8 @@
 #include "Screen.h"
 #include "utils/ImageManager.h"
 #include "utils/Ticker.h"
-#include "entity/World.h"
+
+class World;
 
 class Game : public Screen{
 public:

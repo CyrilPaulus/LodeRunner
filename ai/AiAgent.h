@@ -10,11 +10,11 @@
 
 #include <list>
 #include "../Input.h"
-#include "../entity/Character.h"
-#include "../entity/Block.h"
+
 
 class World;
-
+class Character;
+class Block;
 
 
 class AiAgent {
@@ -43,8 +43,8 @@ struct ANode {
   float f_score;
   
   ANode() {
-    from = NULL;
-    block = NULL;
+    from = 0;
+    block = 0;
     g_score = h_score = f_score = 0;
     x = y = -1;
   }

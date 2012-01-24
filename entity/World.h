@@ -11,13 +11,13 @@
 #include <vector>
 #include <list>
 #include <SFML/Graphics.hpp>
-#include "../utils/ImageManager.h"
-#include "Block.h"
-#include "Goal.h"
 
-class AiAgent;
-#include "../ai/AiManager.h"
-#include "Character.h"
+#include "../Input.h"
+
+class AiManager;
+class Block;
+class Goal;
+class Character;
 
 class World {
 public:

@@ -9,6 +9,11 @@
 #include <stdio.h>
 #include <iostream>
 
+#include "../ai/AiManager.h"
+#include "../entity/Block.h"
+#include "../entity/Character.h"
+#include "../entity/Goal.h"
+
 World::World() {
     player = new Character(this);
     player->SetColor(sf::Color(0, 0, 255));
