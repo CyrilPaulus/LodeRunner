@@ -117,7 +117,7 @@ Input AiAgent::Update(unsigned int frametime) {
     float seconds = frametime / (float)1000;
     timer += seconds;
     
-    if(timer >= 5) {
+    if(timer >= 0.5) {
         timer = 0;
         path.clear();
     }    
