@@ -265,3 +265,4 @@ void World::PushBlock(int i, int j, int value) {
     b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
     blocks.push_back(b);
 }
+
