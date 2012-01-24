@@ -99,14 +99,16 @@ void Character::Update(unsigned int frametime, Input input) {
     if (direction.x != 0) {
         SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
         
-        if(position.x < 0)
-            SetPosition(sf::Vector2f(0, position.y));
-        
-        if(position.x + bbox.x >= world->GetSize().x)
-            SetPosition(sf::Vector2f(world->GetSize().x - bbox.x, position.y));
-
-        Block *b = world->GetCollidingSolid(GetBbox());
+        Entity *b = world->GetCollidingSolid(GetBbox());
         if (b != NULL) {
+            if (direction.x < 0)
+                SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
+            else
+                SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
+        }
+        
+        b = world->GetCollidingEnnemy(GetBbox());
+        if (b != NULL && b != this) {
             if (direction.x < 0)
                 SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
             else
@@ -130,15 +132,19 @@ void Character::Update(unsigned int frametime, Input input) {
     
     if (direction.y != 0) {
         SetPosition(sf::Vector2f(position.x, position.y + direction.y * seconds));
-        
-        if(position.y < 0)
-            SetPosition(sf::Vector2f(position.x, 0));
-        
-        if(position.y + bbox.y >= world->GetSize().y)
-            SetPosition(sf::Vector2f(position.x, world->GetSize().y - bbox.y));
-
-        Block *b = world->GetCollidingSolid(GetBbox());
+              
+        Entity *b = world->GetCollidingSolid(GetBbox());
         if (b != NULL) {
+            if (direction.y < 0)
+                SetPosition(sf::Vector2f(position.x, b->GetBbox().Top + b->GetBbox().Height));
+            else {
+                SetPosition(sf::Vector2f(position.x, b->GetBbox().Top - GetBbox().Height));
+                isFalling = false;
+            }
+        }
+        
+        b = world->GetCollidingEnnemy(GetBbox());
+        if (b != NULL && b != this) {
             if (direction.y < 0)
                 SetPosition(sf::Vector2f(position.x, b->GetBbox().Top + b->GetBbox().Height));
             else {
@@ -159,8 +165,7 @@ void Character::Update(unsigned int frametime, Input input) {
     
     if(direction.y == 0)
         isFalling = false;
-   
-  
+    
 }
 
 void Character::SetSpeed(sf::Vector2f speed) {

@@ -25,9 +25,9 @@ Game::~Game() {
 
 int Game::Run(sf::RenderWindow *app) {
     running = true;
-    world->LoadFromFile("res/map/map15");
+    world->LoadFromFile("res/map/map20");
     app->SetSize(world->GetSize().x, world->GetSize().y);
-    sf::View v = sf::View(sf::FloatRect(0, 0, world->GetSize().x, world->GetSize().y));
+    sf::View v = sf::View(sf::FloatRect(Block::WIDTH, Block::HEIGHT, world->GetSize().x - 2*Block::WIDTH, world->GetSize().y - 2*Block::HEIGHT));
     app->SetView(v);
     
     sf::Event event;

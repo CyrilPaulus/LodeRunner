@@ -9,88 +9,87 @@
 #include <stdio.h>
 #include <iostream>
 
-World::World() {    
+World::World() {
     player = new Character(this);
-    player->SetColor(sf::Color(0,0,255));
+    player->SetColor(sf::Color(0, 0, 255));
     width = 0;
     height = 0;
     completed = false;
     ai = new AiManager(this);
 }
 
-
 World::~World() {
     delete ai;
-    Clean();    
+    Clean();
     delete player;
-    
+
 }
 
 void World::Clean() {
     std::vector<Block*>::iterator it;
-    for(it = blocks.begin(); it != blocks.end(); it++)
+    for (it = blocks.begin(); it != blocks.end(); it++)
         free(*it);
-    
-    std::vector<Goal*>::iterator git;     
-    for(git = goals.begin(); git != goals.end(); git++)
+
+    std::vector<Goal*>::iterator git;
+    for (git = goals.begin(); git != goals.end(); git++)
         free(*git);
-    
-    std::vector<Character*>::iterator enm;     
-    for(enm = enemies.begin(); enm != enemies.end(); enm++)
+
+    std::vector<Character*>::iterator enm;
+    for (enm = enemies.begin(); enm != enemies.end(); enm++)
         free(*enm);
-    
- 
-    
+
+
+
     blocks.empty();
     goals.empty();
     completed = false;
 }
 
 void World::Draw(sf::RenderTarget* rt) {
-          
-    std::vector<Block*>::iterator it;     
-    for(it = blocks.begin(); it != blocks.end(); it++)
+
+    std::vector<Block*>::iterator it;
+    for (it = blocks.begin(); it != blocks.end(); it++)
         (*it)->Draw(rt);
-    
-    std::vector<Goal*>::iterator git;     
-    for(git = goals.begin(); git != goals.end(); git++)
+
+    std::vector<Goal*>::iterator git;
+    for (git = goals.begin(); git != goals.end(); git++)
         (*git)->Draw(rt);
-    
-    std::vector<Character*>::iterator enm;     
-    for(enm = enemies.begin(); enm != enemies.end(); enm++)
-        (*enm)->Draw(rt);   
-    
+
+    std::vector<Character*>::iterator enm;
+    for (enm = enemies.begin(); enm != enemies.end(); enm++)
+        (*enm)->Draw(rt);
+
     player->Draw(rt);
 }
 
 void World::Update(unsigned int frametime, Input input) {
     std::vector<Block*>::iterator it;
-    for(it = blocks.begin(); it != blocks.end(); it++){
+    for (it = blocks.begin(); it != blocks.end(); it++) {
         (*it)->Update(frametime);
-        (*it)->SetColor(sf::Color(255,255,255));
+        (*it)->SetColor(sf::Color(255, 255, 255));
     }
     player->Update(frametime, input);
-    
+
     std::vector<Character*>::iterator cit;
-    for(cit = enemies.begin(); cit != enemies.end(); cit++)
+    for (cit = enemies.begin(); cit != enemies.end(); cit++)
         (*cit)->Update(frametime, ai->Update((*cit), frametime));
-    
-    std::vector<Goal*>::iterator git;     
-    for(git = goals.begin(); git != goals.end(); git++)
-        if(player->GetBbox().Intersects((*git)->GetBbox())) {
+
+    std::vector<Goal*>::iterator git;
+    for (git = goals.begin(); git != goals.end(); git++)
+        if (player->GetBbox().Intersects((*git)->GetBbox())) {
             delete(*git);
             git = goals.erase(git);
-            git--;            
+            git--;
         }
-    
-    if(goals.size() == 0 && !completed) {
+
+    if (goals.size() == 0 && !completed) {
         completed = true;
-        for(it = blocks.begin(); it != blocks.end(); it++)
-            if((*it)->GetType() == Block::ENDLADDER)
+        for (it = blocks.begin(); it != blocks.end(); it++)
+            if ((*it)->GetType() == Block::ENDLADDER)
                 (*it)->SetActive(true);
     }
-    
-  
+
+
 }
 
 void World::LoadFromFile(char* filename) {
@@ -102,24 +101,28 @@ void World::LoadFromFile(char* filename) {
     }
 
     fscanf(f, "d%dx%d\n", &width, &height);
+<<<<<<< HEAD
     
     for(int i = 0 ; i < width; i++)
         
     for (int j = 0; j < height; j++) {
         for (int i = 0; i < width; i++) {
+=======
+    width += 2;
+    height += 2;
+    for (int i = 0; i < width; i++)
+        PushBlock(i, 0, Block::CEMENT);
+
+    for (int j = 1; j < height - 1; j++) {
+        PushBlock(0, j, Block::CEMENT);
+
+        for (int i = 1; i < width - 1; i++) {
+>>>>>>> 35ea7e192409c025ef68b83f402d12ff51460ebf
             int value;
             fscanf(f, "%1d", &value);
 
             //BLOCK
-            Block* b = NULL;
-            if (value >= 1 && value <= 6)
-                b = new Block(value);
-            else
-                b = new Block(Block::EMPTY);
-
-            b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
-            blocks.push_back(b);
-
+            PushBlock(i, j, value);
 
             if (value == 9)
                 player->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
@@ -137,52 +140,63 @@ void World::LoadFromFile(char* filename) {
             }
         }
         fscanf(f, "\n");
+        PushBlock(width - 1, j, Block::CEMENT);
     }
+    for (int i = 0; i < width; i++)
+        PushBlock(i, height - 1, Block::CEMENT);
     fclose(f);
 }
 
 Block* World::GetCollidingSolid(sf::FloatRect bbox) {
 
-    for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            if(i >= 0 && j >= 0 && i < width && j < height) {
-                Block *candidate = blocks[j * width + i];          
-                if (candidate->GetBbox().Intersects(bbox) && candidate->IsSolid() ) {            
+    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
+        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+            Block *candidate = GetBlock(i, j);
+            if (candidate->GetBbox().Intersects(bbox) && candidate->IsSolid()) {
                 return candidate;
+
             }
         }
-    }
+
+    return NULL;
+}
+
+Character* World::GetCollidingEnnemy(sf::FloatRect bbox) {
+std::vector<Character*>::iterator enm;
+    for (enm = enemies.begin(); enm != enemies.end(); enm++)
+        if((*enm)->GetBbox().Intersects(bbox))
+            return *enm;
     
     return NULL;
 }
 
 Block* World::GetCollidingLadder(sf::FloatRect bbox) {
 
-    for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            if(i >= 0 && j >= 0 && i < width && j < height) {
-                Block *candidate = blocks[j * width + i];          
-                if (candidate->GetBbox().Intersects(bbox) && candidate->IsLadder() ) {            
+    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
+        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+
+            Block *candidate = GetBlock(i, j);
+            if (candidate->GetBbox().Intersects(bbox) && candidate->IsLadder()) {
                 return candidate;
+
             }
         }
-    }
-    
+
     return NULL;
 }
 
 Block* World::GetCollidingRope(sf::FloatRect bbox) {
 
-    for(int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for(int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
-            if(i >= 0 && j >= 0 && i < width && j < height) {
-                Block *candidate = blocks[j * width + i];          
-                if (candidate->GetBbox().Intersects(bbox) && candidate->IsRope() ) {            
+    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
+        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+
+            Block *candidate = GetBlock(i, j);
+            if (candidate->GetBbox().Intersects(bbox) && candidate->IsRope()) {
                 return candidate;
+
             }
         }
-    }
-    
+
     return NULL;
 }
 
@@ -191,10 +205,10 @@ sf::Vector2f World::GetSize() {
 }
 
 bool World::IsUnderRope(int x, int y) {
-    for(int j = y - 1; j > 0; j--) {
-        if(blocks[j*width + x]->GetType() == Block::ROPE)
+    for (int j = y - 1; j > 0; j--) {
+        if (GetBlock(x, j)->GetType() == Block::ROPE)
             return true;
-        else if(blocks[j*width+x]->IsSolid())
+        else if (GetBlock(x, j)->IsSolid())
             break;
     }
     return false;
@@ -202,27 +216,27 @@ bool World::IsUnderRope(int x, int y) {
 
 std::list<Block*> World::GetNeighbors(int x, int y) {
     std::list<Block*> value;
-    Block* current = blocks[y * width + x];
+    Block* current = GetBlock(x, y);
     bool isSolidUnderCurrent = false;
-    if (y + 1 < height ) 
-        isSolidUnderCurrent = blocks[(y+1) * width + x]->IsSolid() || blocks[(y+1) * width + x]->IsLadder();
-    
+    if (y + 1 < height)
+        isSolidUnderCurrent = GetBlock(x, y + 1)->IsSolid() || GetBlock(x, y + 1)->IsLadder();
+
     int xs[] = {x, x - 1, x + 1, x};
     int ys[] = {y - 1, y, y, y + 1};
 
-   
+
     for (int i = 0; i < 4; i++) {
-       
+
         if (xs[i] < 0 || xs[i] >= width || ys[i] < 0 || ys[i] >= height)
             continue;
-                 
-        Block* candidate = blocks[ys[i] * width + xs[i]];
+
+        Block* candidate = GetBlock(xs[i], ys[i]);
 
         if ((candidate->IsLadder() || candidate->IsRope()) && (i == 1 || i == 2))
             value.push_back(candidate);
         else if (!candidate->IsSolid() && (i == 1 || i == 2) &&
-                (current->IsLadder() || current->IsRope() || isSolidUnderCurrent)) 
-            value.push_back(candidate);       
+                (current->IsLadder() || current->IsRope() || isSolidUnderCurrent))
+            value.push_back(candidate);
         else if (!candidate->IsSolid() && i == 3)
             value.push_back(candidate);
         else if (!(candidate->IsSolid()) && i == 0
@@ -233,12 +247,22 @@ std::list<Block*> World::GetNeighbors(int x, int y) {
 }
 
 Block* World::GetBlock(int x, int y) {
-    if(x >= 0 && x < width && y >= 0 && y < height)
-        return blocks[y*width + x];
-    else
-        return NULL;
+    //Need to offset for the border
+    return blocks[y * width + x];
+
 }
 
 Character* World::GetPlayer() {
     return player;
+}
+
+void World::PushBlock(int i, int j, int value) {
+    Block* b = NULL;
+    if (value >= 1 && value <= 6)
+        b = new Block(value);
+    else
+        b = new Block(Block::EMPTY);
+
+    b->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+    blocks.push_back(b);
 }
