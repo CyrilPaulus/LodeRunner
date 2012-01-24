@@ -129,7 +129,7 @@ void World::LoadFromFile(char* filename) {
             else if (value == 8) {
                 Character* en = new Character(this);
                 en->SetPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
-                en->SetSpeed(sf::Vector2f(75, 75));
+                en->SetSpeed(sf::Vector2f(175, 150));
                 enemies.push_back(en);
                 ai->AddAgent(en);
             } else if (value == 7) {

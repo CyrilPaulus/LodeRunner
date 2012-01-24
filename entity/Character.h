@@ -20,9 +20,12 @@ public:
     void SetSpeed(sf::Vector2f speed);
     sf::Vector2f GetSpeed();
     void Align(sf::Vector2f pos);
+    void AlignToGridX();
+    void AlignToGridY();
     
 private:
     sf::Vector2f speed; 
+    sf::Vector2f direction;
     bool moveX;
     bool moveY;
     bool isFalling;

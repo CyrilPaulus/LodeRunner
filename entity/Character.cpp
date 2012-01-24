@@ -11,12 +11,13 @@
 Character::Character(World *w) : Entity() {
     image->SetTexture(*ImageManager::getInstance()->get("them"));
     SetBBox(sf::Vector2f(24, 30));
-    speed = sf::Vector2f(100,100);
+    speed = sf::Vector2f(250,150);
     isFalling = false;
     canFall = true;
     isHanging = false;
     isClimbing = false;
     world = w;
+    direction = sf::Vector2f(0, 0);
 }
 
 void Character::Update(unsigned int frametime, Input input) {
@@ -45,7 +46,7 @@ void Character::Update(unsigned int frametime, Input input) {
     Block* ladder = world->GetCollidingLadder(GetBbox());
 
     bool isCentring = false;
-    if ((input.Up || input.Down) && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20))) {
+    if ((input.Up || input.Down || isFalling) && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 4))) {
 
         isClimbing = true;
         if (input.Up)
@@ -54,11 +55,8 @@ void Character::Update(unsigned int frametime, Input input) {
             direction += sf::Vector2f(0, speed.y);
         
         isCentring = true;
-        int deltaX = ladder->GetPosition().x + 0.5 * Block::WIDTH - (GetPosition().x + 0.5 * bbox.x);
-        if (deltaX > 0)
-            direction += sf::Vector2f(speed.x, 0);
-        else if (deltaX < 0)
-            direction -= sf::Vector2f(speed.x, 0);
+        
+        AlignToGridX();
     } else if (!ladder) {
         isClimbing = false;
     }    
@@ -152,10 +150,13 @@ void Character::Update(unsigned int frametime, Input input) {
         }
         
         
-    }    
+    }
     
-     
-        
+    if(direction.x == 0 )
+        AlignToGridX();
+    
+    if(direction.y == 0)
+        AlignToGridY();        
 }
 
 void Character::SetSpeed(sf::Vector2f speed) {
@@ -171,4 +172,12 @@ void Character::Align(sf::Vector2f pos) {
         SetPosition(pos);
     else
         SetPosition(sf::Vector2f(pos.x, GetPosition().y));
+}
+
+void Character::AlignToGridX() {
+    SetPosition( sf::Vector2f((int)(GetCenter().x / Block::WIDTH) * Block::WIDTH + (Block::WIDTH - GetBbox().Width) / 2, GetPosition().y));
+}
+
+void Character::AlignToGridY() {
+    SetPosition(sf::Vector2f(GetPosition().x, (int)(GetCenter().y / Block::HEIGHT) * Block::HEIGHT));
 }
