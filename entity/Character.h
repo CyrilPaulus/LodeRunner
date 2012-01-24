@@ -26,8 +26,10 @@ private:
     bool moveX;
     bool moveY;
     bool isFalling;
+    bool isClimbing;
+    bool isHanging;
     bool canFall;
-    bool canRope;
+    
     World *world;
 };
 

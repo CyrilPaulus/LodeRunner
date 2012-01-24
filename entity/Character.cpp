@@ -14,7 +14,8 @@ Character::Character(World *w) : Entity() {
     speed = sf::Vector2f(100,100);
     isFalling = false;
     canFall = true;
-    canRope = true;
+    isHanging = false;
+    isClimbing = false;
     world = w;
 }
 
@@ -42,96 +43,49 @@ void Character::Update(unsigned int frametime, Input input) {
     sf::Vector2f direction = sf::Vector2f(0, 0);
     Block* rope = world->GetCollidingRope(GetBbox());
     Block* ladder = world->GetCollidingLadder(GetBbox());
-    
-    
-    //Left Right - Up Down (ladder)
-    if(!isFalling) {
-        if(input.Left)
-            direction -= sf::Vector2f(speed.x, 0);
 
-        if(input.Right)
-            direction += sf::Vector2f(speed.x, 0);  
-    }
+    bool isCentring = false;
+    if ((input.Up || input.Down) && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20))) {
 
-    if(input.Up && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20) || !canFall)) {
-           
-            canFall = false;
+        isClimbing = true;
+        if (input.Up)
             direction -= sf::Vector2f(0, speed.y);
-            int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
-            if(deltaX > 0)
-                direction += sf::Vector2f(speed.x, 0);                
-            else if(deltaX < 0)
-                direction -= sf::Vector2f(speed.x, 0);
-        }
-        
-        if(input.Down && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20) || !canFall)) {
-           
-            canFall = false;
+        else
             direction += sf::Vector2f(0, speed.y);
-            int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
-            if(deltaX > 0)
-                direction += sf::Vector2f(speed.x, 0);                
-            else if(deltaX < 0)
-                direction -= sf::Vector2f(speed.x, 0);
-        }
+        
+        isCentring = true;
+        int deltaX = ladder->GetPosition().x + 0.5 * Block::WIDTH - (GetPosition().x + 0.5 * bbox.x);
+        if (deltaX > 0)
+            direction += sf::Vector2f(speed.x, 0);
+        else if (deltaX < 0)
+            direction -= sf::Vector2f(speed.x, 0);
+    } else if (!ladder) {
+        isClimbing = false;
+    }    
 
     //Align to rope
-    if ((rope && position.y >= rope->GetPosition().y && position.y <= rope->GetPosition().y + 10)) {
-        if (canRope) {
-            if (rope) {
-                int deltaY = rope->GetPosition().y - GetPosition().y;
-                if (abs(deltaY) < speed.y * seconds)
-                    SetPosition(sf::Vector2f(position.x, rope->GetPosition().y));
-                else if (deltaY > 0)
-                    direction += sf::Vector2f(0, speed.y);
-                else if (deltaY < 0)
-                    direction -= sf::Vector2f(0, speed.y);
+    if (rope && (input.Left || input.Right || isFalling) && !(input.Down)) {
+        isHanging = true;
 
-            }
-            canFall = false;
-            isFalling = false;
-        }
-    } else {
-        canRope = true;
-    }
-
-    //Update X pos, and solve collisions
-    if (direction.x != 0) {
-        SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
-        
-        
-        Entity * b = world->GetCollidingEnnemy(GetBbox());
-        if (b != NULL && b != this && b != world->GetPlayer() && this != world->GetPlayer()) {
-            if (b->GetPosition().x < GetPosition().x)
-                SetPosition(GetPosition() + sf::Vector2f(speed.x / 2 * seconds, 0));                    
-            else 
-               SetPosition(GetPosition() - sf::Vector2f(speed.x / 2 * seconds, 0));            
-        }
-        
-        b = world->GetCollidingSolid(GetBbox());
-        if (b != NULL) {
-            if (direction.x < 0)
-                SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
-            else
-                SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
-        }
-        
-        
+        int deltaY = rope->GetPosition().y - GetPosition().y;
+        if (abs(deltaY) < 4)
+            SetPosition(sf::Vector2f(position.x, rope->GetPosition().y));
     }
     
-        
-    if(input.Down && !canFall && rope) {
-        canRope = false;
-        canFall = true;  
-    }    
     
-    if(canFall) {
+    if (!rope || input.Down || rope->GetPosition().y != GetPosition().y)
+        isHanging = false;
+    
+    if(isClimbing && isHanging)
+        isClimbing = false;
+    
+    if(!isHanging && !isClimbing)
         isFalling = true;
-        direction += sf::Vector2f(0, speed.y);        
-    }     
+    else
+        isFalling = false;
     
-    if(!ladder && (!rope || (position.x != rope->GetBbox().Top)))
-        canFall = true;   
+     if(isFalling) 
+        direction += sf::Vector2f(0, speed.y);       
     
     if (direction.y != 0) {
         SetPosition(sf::Vector2f(position.x, position.y + direction.y * seconds));
@@ -158,17 +112,50 @@ void Character::Update(unsigned int frametime, Input input) {
         
         //Special case to walk on ladder
         ladder = world->GetCollidingLadder(GetBbox());
-        if(ladder && direction.y > 0  && isFalling &&canFall && ladder->GetPosition().y > position.y) {
+        if(ladder && direction.y > 0  && isFalling && ladder->GetPosition().y > position.y) {
             if(!input.Down)
                 SetPosition(sf::Vector2f(position.x, ladder->GetBbox().Top - GetBbox().Height));            
             isFalling = false;            
         }
                 
+    } 
+    
+    //Left Right - Up Down (ladder)
+    if(!isFalling && !isCentring){
+        if(input.Left)
+            direction -= sf::Vector2f(speed.x, 0);
+        
+        if(input.Right)
+            direction += sf::Vector2f(speed.x, 0);  
     }
     
-    if(direction.y == 0)
-        isFalling = false;
+
+    //Update X pos, and solve collisions
+    if (direction.x != 0) {
+        SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
+        
+        
+        Entity * b = world->GetCollidingEnnemy(GetBbox());
+        if (b != NULL && b != this && b != world->GetPlayer() && this != world->GetPlayer()) {
+            if (b->GetPosition().x < GetPosition().x)
+                SetPosition(GetPosition() + sf::Vector2f(speed.x / 2 * seconds, 0));                    
+            else 
+               SetPosition(GetPosition() - sf::Vector2f(speed.x / 2 * seconds, 0));            
+        }
+        
+        b = world->GetCollidingSolid(GetBbox());
+        if (b != NULL) {
+            if (direction.x < 0)
+                SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
+            else
+                SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
+        }
+        
+        
+    }    
     
+     
+        
 }
 
 void Character::SetSpeed(sf::Vector2f speed) {
