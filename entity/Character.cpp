@@ -46,15 +46,15 @@ void Character::Update(unsigned int frametime, Input input) {
     
     //Left Right - Up Down (ladder)
     if(!isFalling) {
-        if(input.Left )
+        if(input.Left && !input.Down && !input.Up)
             direction -= sf::Vector2f(speed.x, 0);
 
-        if(input.Right)
+        if(input.Right && !input.Down && !input.Up)
             direction += sf::Vector2f(speed.x, 0);  
     }
 
-    if(input.Up && ladder) {
-            direction = sf::Vector2f(0, 0);
+    if(input.Up && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20) || !canFall)) {
+           
             canFall = false;
             direction -= sf::Vector2f(0, speed.y);
             int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
@@ -64,8 +64,8 @@ void Character::Update(unsigned int frametime, Input input) {
                 direction -= sf::Vector2f(speed.x, 0);
         }
         
-        if(input.Down && ladder) {
-            direction = sf::Vector2f(0, 0);
+        if(input.Down && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 20) || !canFall)) {
+           
             canFall = false;
             direction += sf::Vector2f(0, speed.y);
             int deltaX = ladder->GetPosition().x + 0.5 *Block::WIDTH - (GetPosition().x + 0.5* bbox.x);
