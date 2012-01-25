@@ -42,7 +42,7 @@ int Game::Run() {
             HandleEvent(event);
         }
         
-        if(ticker->Tick()) 
+        if(ticker->Tick())  
           Update(ticker->getElapsedTime());
         
         //Draw screen
@@ -62,7 +62,14 @@ void Game::Update(sf::Time frametime) {
     input.LeftCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::A);
     input.RightCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::Z);
     
-    world->Update(frametime, input);
+    int status = world->Update(frametime, input);
+    switch(status) {
+        case World::WIN:
+            NextMap();
+            break;
+        default:
+            break;
+    }
 }
 
 void Game::HandleEvent(sf::Event event) {

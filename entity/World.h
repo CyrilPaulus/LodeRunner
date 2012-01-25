@@ -21,10 +21,12 @@ class Character;
 
 class World {
 public:
+    enum {NOTHING, WIN, DEAD};
+    
     World();
     virtual ~World();
     
-    void Update(sf::Time frametime, Input in);
+    int Update(sf::Time frametime, Input in);
     void Draw(sf::RenderTarget* rt);
     Block* GetCollidingSolid(sf::FloatRect bbox);
     Block* GetCollidingLadder(sf::FloatRect bbox);

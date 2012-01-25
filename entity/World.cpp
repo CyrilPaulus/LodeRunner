@@ -68,7 +68,7 @@ void World::Draw(sf::RenderTarget* rt) {
     player->Draw(rt);
 }
 
-void World::Update(sf::Time frametime, Input input) {
+int World::Update(sf::Time frametime, Input input) {
     std::vector<Block*>::iterator it;
     for (it = blocks.begin(); it != blocks.end(); it++) {
         (*it)->Update(frametime);
@@ -95,7 +95,10 @@ void World::Update(sf::Time frametime, Input input) {
                 (*it)->SetActive(true);
     }
 
-
+    if (completed && player->GetPosition().y <= 30) 
+        return World::WIN;
+     else
+        return World::NOTHING;
 }
 
 void World::LoadFromFile(std::string filename) {
