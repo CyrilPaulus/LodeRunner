@@ -46,17 +46,19 @@ void Character::Update(unsigned int frametime, Input input) {
     Block* ladder = world->GetCollidingLadder(GetBbox());
 
     bool isCentring = false;
-    if ((input.Up || input.Down || isFalling) && ladder && ((abs(GetCenter().x - ladder->GetCenter().x) < 4))) {
+    if (ladder && (fabs(ladder->GetCenter().x - GetCenter().x) < 4)) {
 
         isClimbing = true;
         if (input.Up)
             direction -= sf::Vector2f(0, speed.y);
-        else
+        else if (input.Down)
             direction += sf::Vector2f(0, speed.y);
         
-        isCentring = true;
         
-        AlignToGridX();
+        if(input.Up || input.Down){
+	  SetPosition(sf::Vector2f(ladder->GetPosition().x + 1/2* (ladder->GetBbox().Width - GetBbox().Width), GetPosition().y));
+	  isCentring = true;
+	}
     } else if (!ladder) {
         isClimbing = false;
     }    
