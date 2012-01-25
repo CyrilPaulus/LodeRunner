@@ -8,7 +8,7 @@
 #ifndef AIMANAGER_H
 #define	AIMANAGER_H
 #include <map>
-
+#include "SFML/System.hpp"
 class World;
 class Character;
 class Input;
@@ -19,7 +19,7 @@ public:
     AiManager(World* w);
     AiManager(const AiManager& orig);
     void AddAgent(Character *c);
-    Input Update(Character *c, unsigned int frametime);
+    Input Update(Character *c, sf::Time frametime);
     virtual ~AiManager();
 private:
     std::map<Character*, AiAgent*> agents;

@@ -24,8 +24,8 @@ World::World() {
 }
 
 World::~World() {
-    delete ai;
     Clean();
+    delete ai;
     delete player;
 
 }
@@ -68,7 +68,7 @@ void World::Draw(sf::RenderTarget* rt) {
     player->Draw(rt);
 }
 
-void World::Update(unsigned int frametime, Input input) {
+void World::Update(sf::Time frametime, Input input) {
     std::vector<Block*>::iterator it;
     for (it = blocks.begin(); it != blocks.end(); it++) {
         (*it)->Update(frametime);

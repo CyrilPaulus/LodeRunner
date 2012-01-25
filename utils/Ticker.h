@@ -13,15 +13,15 @@
 class Ticker {
 public:
     Ticker();
-    Ticker(unsigned int tickTime);
+    Ticker(sf::Time tickTime);
     bool Tick();
-    unsigned int getElapsedTime();
-    void setRate(unsigned int rate);
+    sf::Time getElapsedTime();
+    void setRate(int tps);
     
 private:
     sf::Clock clock;
-    unsigned int tickTime;      
-    unsigned int elapsedTime;
+    sf::Time tickTime;      
+    sf::Time elapsedTime;
 };
 
 #endif	/* TICKER_H */

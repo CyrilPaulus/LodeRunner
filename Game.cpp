@@ -36,8 +36,7 @@ int Game::Run() {
     sf::Event event;
     
     while(running) {
-        std::cout << mapIndex << std::endl;
-        
+                
         //Manage event
         while(app->PollEvent(event)) {
             HandleEvent(event);
@@ -54,7 +53,7 @@ int Game::Run() {
     return Screen::EXIT;
 }
 
-void Game::Update(unsigned int frametime) {
+void Game::Update(sf::Time frametime) {
     Input input;
     input.Left = sf::Keyboard::IsKeyPressed(sf::Keyboard::Left);
     input.Right = sf::Keyboard::IsKeyPressed(sf::Keyboard::Right);

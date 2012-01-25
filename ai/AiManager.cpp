@@ -26,6 +26,6 @@ void AiManager::AddAgent(Character* c) {
     agents[c] = a;
 }
 
-Input AiManager::Update(Character* c, unsigned int frametime) {
+Input AiManager::Update(Character* c, sf::Time frametime) {
     return agents[c]->Update(frametime);
 }

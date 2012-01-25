@@ -10,6 +10,7 @@
 
 #include <list>
 #include "../Input.h"
+#include <SFML/System.hpp>
 
 
 class World;
@@ -20,7 +21,7 @@ class Block;
 class AiAgent {
 public:
     AiAgent(World *w, Character *c);    
-    Input Update(unsigned int frametime);
+    Input Update(sf::Time frametime);
     virtual ~AiAgent();
     
 private:
@@ -29,7 +30,7 @@ private:
     std::list<Block*> ComputePath(int x0, int y0, int x1, int y1);
     std::list<Block*> path;
     Block* current;
-    float timer;
+    sf::Time timer;
      
 };
 

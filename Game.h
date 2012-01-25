@@ -26,7 +26,7 @@ public:
     
 private:
     void Draw(sf::RenderTarget *app);
-    void Update(unsigned int frametime);
+    void Update(sf::Time frametime);
     void HandleEvent(sf::Event event);
     sf::RenderWindow *app;
    

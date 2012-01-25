@@ -16,7 +16,7 @@ class World;
 class Character : public Entity {
 public:
     Character(World *world);
-    void Update(unsigned int frametime, Input input);
+    void Update(sf::Time frametime, Input input);
     void SetSpeed(sf::Vector2f speed);
     sf::Vector2f GetSpeed();
     void Align(sf::Vector2f pos);

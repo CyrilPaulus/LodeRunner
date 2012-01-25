@@ -24,7 +24,7 @@ public:
     World();
     virtual ~World();
     
-    void Update(unsigned int frametime, Input in);
+    void Update(sf::Time frametime, Input in);
     void Draw(sf::RenderTarget* rt);
     Block* GetCollidingSolid(sf::FloatRect bbox);
     Block* GetCollidingLadder(sf::FloatRect bbox);

@@ -5,6 +5,8 @@
  * Created on January 2, 2012, 6:03 PM
  */
 
+#include <SFML/System/Time.hpp>
+
 #include "Entity.h"
 #include "Block.h"
 
@@ -21,14 +23,14 @@ Block::Block(int type) : Entity(){
         active = false;
     else
         active = true;
-    timer = 0;
+    timer = sf::Seconds(0);
 }
 
-void Block::Update(unsigned int time) {
+void Block::Update(sf::Time frametime) {
     if(!active && type == Block::WALL){
-        timer += time / (float)1000;
-        if(timer >= 3){
-            timer = 0;
+        timer += frametime;
+        if(timer >= sf::Seconds(3)){
+            timer = sf::Seconds(0);
             active = true;
         }
             

@@ -18,7 +18,7 @@ public:
     
     Block(int type);
     
-    void Update(unsigned int time);
+    void Update(sf::Time frametime);
     void Draw(sf::RenderTarget* rt);
     bool IsSolid();
     bool IsLadder();
@@ -31,7 +31,7 @@ private:
     static const char* file[];
     int type;
     bool active;
-    float timer;
+    sf::Time timer;
 };
 
 #endif	/* BLOCK_H */

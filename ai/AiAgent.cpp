@@ -9,6 +9,7 @@
 #include "AiAgent.h"
 #include <set>
 #include <iostream>
+#include <SFML/System/Time.hpp>
 
 #include "../entity/World.h"
 #include "../entity/Character.h"
@@ -22,6 +23,7 @@ AiAgent::AiAgent(World* w, Character *c) {
     world = w;
     this->c = c;
     current = NULL;
+    timer = sf::Seconds(0);
 }
 
 AiAgent::~AiAgent() {
@@ -113,12 +115,12 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
     return result;
 }
 
-Input AiAgent::Update(unsigned int frametime) {
-    float seconds = frametime / (float)1000;
-    timer += seconds;
+Input AiAgent::Update(sf::Time frametime) {
     
-    if(timer >= 0.5) {
-        timer = 0;
+    timer += frametime;
+    
+    if(timer >= sf::Seconds(0.5)) {
+        timer = sf::Seconds(0);
         path.clear();
     }    
     
@@ -145,9 +147,9 @@ Input AiAgent::Update(unsigned int frametime) {
     if(!path.empty()) {
         Block* first = path.front();
         
-         if(abs(first->GetPosition().y - c->GetPosition().y) <= c->GetSpeed().y * seconds){
+        if(abs(first->GetPosition().y - c->GetPosition().y) <= c->GetSpeed().y * frametime.AsSeconds())
             c->Align(sf::Vector2f(c->GetPosition().x, first->GetPosition().y));            
-        }
+        
         
         if(first->GetPosition().x + 0.5 * Block::WIDTH < c->GetPosition().x + 0.5 * c->GetBbox().Width)
             rtn.Left = true;        

@@ -21,11 +21,11 @@ Character::Character(World *w) : Entity() {
     direction = sf::Vector2f(0, 0);
 }
 
-void Character::Update(unsigned int frametime, Input input) {
+void Character::Update(sf::Time frametime, Input input) {
     
     int x0 = position.x / Block::WIDTH;
     int y0 = position.y / Block::HEIGHT;
-    float seconds = frametime / (float)1000;
+    float seconds = frametime.AsSeconds();
     
     //Carve
     if(input.LeftCarve) {
