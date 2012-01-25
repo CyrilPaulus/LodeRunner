@@ -35,14 +35,14 @@ struct comp {
     }
 };
 
-std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
+std::list<Block*> AiAgent::computePath(int x0, int y0, int x1, int y1) {
     std::list<Block*> result;
     
     std::set<ANode*, comp> closedset;
     std::set<ANode*, comp> openset;
     
     ANode* start = new ANode();
-    start->block = world->GetBlock(x0, y0);
+    start->block = world->getBlock(x0, y0);
     start->x = x0;
     start->y = y0;
     start->g_score = 0;
@@ -76,14 +76,14 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
         openset.erase(x);
         closedset.insert(x);
         
-        std::list<Block*> neighbours = world->GetNeighbors(x->x, x->y);
+        std::list<Block*> neighbours = world->getNeighbors(x->x, x->y);
         std::list<Block*>::iterator bi;
         for(bi = neighbours.begin(); bi != neighbours.end(); bi++ ) {
             ANode* y = new ANode();
             y->block = *bi;
             y->from = x;
-            y->x = (*bi)->GetPosition().x / Block::WIDTH;
-            y->y = (*bi)->GetPosition().y / Block::HEIGHT;
+            y->x = (*bi)->getPosition().x / Block::WIDTH;
+            y->y = (*bi)->getPosition().y / Block::HEIGHT;
             y->g_score = x->g_score + 1;
             y->h_score = distM(y->x, y->y, x1, y1);
             y->f_score = y->g_score + y->h_score;
@@ -115,7 +115,7 @@ std::list<Block*> AiAgent::ComputePath(int x0, int y0, int x1, int y1) {
     return result;
 }
 
-Input AiAgent::Update(sf::Time frametime) {
+Input AiAgent::update(sf::Time frametime) {
     
     timer += frametime;
     
@@ -128,42 +128,42 @@ Input AiAgent::Update(sf::Time frametime) {
     
     if(path.empty()) {      
 
-     int x0 = c->GetPosition().x / Block::WIDTH;
-        int y0 = c->GetPosition().y / Block::HEIGHT;
+     int x0 = c->getPosition().x / Block::WIDTH;
+        int y0 = c->getPosition().y / Block::HEIGHT;
 
-        int x1 = world->GetPlayer()->GetPosition().x / Block::WIDTH;
-        int y1 = world->GetPlayer()->GetPosition().y / Block::HEIGHT;
+        int x1 = world->getPlayer()->getPosition().x / Block::WIDTH;
+        int y1 = world->getPlayer()->getPosition().y / Block::HEIGHT;
         
-        path = ComputePath(x0, y0, x1, y1);
+        path = computePath(x0, y0, x1, y1);
         
     }   
     
     //FUCK YEAH
     for(std::list<Block*>::iterator it = path.begin(); it != path.end(); it++){
        long color = reinterpret_cast<long>(this);       
-        (*it)->SetColor(sf::Color(color, color >> 8, color >> 16));
+        (*it)->setColor(sf::Color(color, color >> 8, color >> 16));
     }
     
     if(!path.empty()) {
         Block* first = path.front();
         
-        if(abs(first->GetPosition().y - c->GetPosition().y) <= c->GetSpeed().y * frametime.AsSeconds())
-            c->Align(sf::Vector2f(c->GetPosition().x, first->GetPosition().y));            
+        if(abs(first->getPosition().y - c->getPosition().y) <= c->getSpeed().y * frametime.AsSeconds())
+            c->align(sf::Vector2f(c->getPosition().x, first->getPosition().y));            
         
         
-        if(first->GetPosition().x + 0.5 * Block::WIDTH < c->GetPosition().x + 0.5 * c->GetBbox().Width)
+        if(first->getPosition().x + 0.5 * Block::WIDTH < c->getPosition().x + 0.5 * c->getBbox().Width)
             rtn.Left = true;        
         
-        if(first->GetPosition().x + 0.5 * Block::WIDTH > c->GetPosition().x + 0.5 * c->GetBbox().Width)
+        if(first->getPosition().x + 0.5 * Block::WIDTH > c->getPosition().x + 0.5 * c->getBbox().Width)
             rtn.Right = true;     
         
-        if(first->GetPosition().y + 0.5 * Block::HEIGHT < c->GetPosition().y + 0.5 * c->GetBbox().Height)
+        if(first->getPosition().y + 0.5 * Block::HEIGHT < c->getPosition().y + 0.5 * c->getBbox().Height)
             rtn.Up = true;
         
-        if(first->GetPosition().y + 0.5 * Block::HEIGHT > c->GetPosition().y + 0.5 * c->GetBbox().Height)
+        if(first->getPosition().y + 0.5 * Block::HEIGHT > c->getPosition().y + 0.5 * c->getBbox().Height)
             rtn.Down = true; 
    
-        sf::Vector2f dist = c->GetCenter() - first->GetCenter();
+        sf::Vector2f dist = c->getCenter() - first->getCenter();
             
         if (dist.x * dist.x + dist.y * dist.y <= 64)           
             path.pop_front();  

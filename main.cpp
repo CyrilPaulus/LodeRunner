@@ -33,14 +33,14 @@ int main(int argc, char** argv) {
             std::string arg = std::string(argv[i]);           
             if(arg.compare("-m") == 0 && i + 1 < argc) {
                 std::cout << "Loading Map : " << argv[i + 1] << std::endl;
-                game.LoadMap(argv[i+1]);
+                game.loadMap(argv[i+1]);
             }
         }
     }    
     
     
     while(screen != Screen::EXIT) {
-        screen = screens[screen]->Run();
+        screen = screens[screen]->run();
     }
     
     ImageManager::release();

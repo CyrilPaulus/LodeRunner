@@ -17,8 +17,8 @@ const char* Block::file[] = {"map/empty", "map/wall", "map/cement", "map/ladder"
 Block::Block(int type) : Entity(){
     this->type = type;
     //if(type != Block::EMPTY)
-        image->SetTexture(*ImageManager::getInstance()->get(file[type]));
-    SetBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
+        image->SetTexture(*ImageManager::getInstance()->getImage(file[type]));
+    setBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
     if(type == Block::ENDLADDER)
         active = false;
     else
@@ -26,7 +26,7 @@ Block::Block(int type) : Entity(){
     timer = sf::Seconds(0);
 }
 
-void Block::Update(sf::Time frametime) {
+void Block::update(sf::Time frametime) {
     if(!active && type == Block::WALL){
         timer += frametime;
         if(timer >= sf::Seconds(3)){
@@ -38,28 +38,28 @@ void Block::Update(sf::Time frametime) {
     
 }
 
-int Block::GetType() {
+int Block::getType() {
     return type;
 }
 
-void Block::Draw(sf::RenderTarget* rt) {
+void Block::draw(sf::RenderTarget* rt) {
     if(active)
-        Entity::Draw(rt);
+        Entity::draw(rt);
 }
 
-bool Block::IsSolid() {
+bool Block::isSolid() {
     return active && (type == Block::CEMENT || type == Block::WALL);
 }
 
-bool Block::IsLadder() {
+bool Block::isLadder() {
     return (type == Block::LADDER || type == Block::ENDLADDER) && active;
 }
 
-bool Block::IsRope() {
+bool Block::isRope() {
     return type == Block::ROPE;
 }
 
-void Block::SetActive(bool active) {
+void Block::setActive(bool active) {
     this->active = active;
 }
 

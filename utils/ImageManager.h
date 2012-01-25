@@ -17,7 +17,7 @@ class CImageManager{
     
 public:
     virtual ~CImageManager();
-    const sf::Texture *get(std::string);
+    const sf::Texture *getImage(std::string);
     
 private:
     std::map<std::string, sf::Texture*> imageSet;

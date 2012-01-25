@@ -18,8 +18,8 @@ class AiManager {
 public:
     AiManager(World* w);
     AiManager(const AiManager& orig);
-    void AddAgent(Character *c);
-    Input Update(Character *c, sf::Time frametime);
+    void addAgent(Character *c);
+    Input update(Character *c, sf::Time frametime);
     virtual ~AiManager();
 private:
     std::map<Character*, AiAgent*> agents;

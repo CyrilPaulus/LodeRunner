@@ -10,8 +10,8 @@
 #include "World.h"
 #include <math.h>
 Character::Character(World *w) : Entity() {
-    image->SetTexture(*ImageManager::getInstance()->get("them"));
-    SetBBox(sf::Vector2f(24, 30));
+    image->SetTexture(*ImageManager::getInstance()->getImage("them"));
+    setBBox(sf::Vector2f(24, 30));
     speed = sf::Vector2f(250,150);
     isFalling = false;
     canFall = true;
@@ -21,7 +21,7 @@ Character::Character(World *w) : Entity() {
     direction = sf::Vector2f(0, 0);
 }
 
-void Character::Update(sf::Time frametime, Input input) {
+void Character::update(sf::Time frametime, Input input) {
     
     int x0 = position.x / Block::WIDTH;
     int y0 = position.y / Block::HEIGHT;
@@ -29,25 +29,25 @@ void Character::Update(sf::Time frametime, Input input) {
     
     //Carve
     if(input.LeftCarve) {
-        Block* b = world->GetBlock(x0 - 1, y0 + 1);
-        Block* c = world->GetBlock(x0 - 1, y0 );
-        if(b && b->GetType() == Block::WALL && !c->IsSolid() && !c->IsLadder() && !c->IsRope())
-            b->SetActive(false);
+        Block* b = world->getBlock(x0 - 1, y0 + 1);
+        Block* c = world->getBlock(x0 - 1, y0 );
+        if(b && b->getType() == Block::WALL && !c->isSolid() && !c->isLadder() && !c->isRope())
+            b->setActive(false);
     }
     
     if(input.RightCarve) {
-        Block* b = world->GetBlock(x0 + 1, y0 + 1);
-        Block* c = world->GetBlock(x0 + 1, y0);
-        if(b && b->GetType() == Block::WALL && !c->IsSolid() && !c->IsLadder() && !c->IsRope())
-            b->SetActive(false);
+        Block* b = world->getBlock(x0 + 1, y0 + 1);
+        Block* c = world->getBlock(x0 + 1, y0);
+        if(b && b->getType() == Block::WALL && !c->isSolid() && !c->isLadder() && !c->isRope())
+            b->setActive(false);
     }
     
     sf::Vector2f direction = sf::Vector2f(0, 0);
-    Block* rope = world->GetCollidingRope(GetBbox());
-    Block* ladder = world->GetCollidingLadder(GetBbox());
+    Block* rope = world->getCollidingRope(getBbox());
+    Block* ladder = world->getCollidingLadder(getBbox());
 
     bool isCentring = false;
-    if (ladder && (fabs(ladder->GetCenter().x - GetCenter().x) < 4)) {
+    if (ladder && (fabs(ladder->getCenter().x - getCenter().x) < 4)) {
 
         isClimbing = true;
         if (input.Up)
@@ -57,7 +57,7 @@ void Character::Update(sf::Time frametime, Input input) {
         
         
         if(input.Up || input.Down){
-	  SetPosition(sf::Vector2f(ladder->GetPosition().x + 1/2* (ladder->GetBbox().Width - GetBbox().Width), GetPosition().y));
+	  setPosition(sf::Vector2f(ladder->getPosition().x + 1/2* (ladder->getBbox().Width - getBbox().Width), getPosition().y));
 	  isCentring = true;
 	}
     } else if (!ladder) {
@@ -68,13 +68,13 @@ void Character::Update(sf::Time frametime, Input input) {
     if (rope && (input.Left || input.Right || isFalling) && !(input.Down)) {
         isHanging = true;
 
-        int deltaY = rope->GetPosition().y - GetPosition().y;
+        int deltaY = rope->getPosition().y - getPosition().y;
         if (abs(deltaY) < 4)
-            SetPosition(sf::Vector2f(position.x, rope->GetPosition().y));
+            setPosition(sf::Vector2f(position.x, rope->getPosition().y));
     }
     
     
-    if (!rope || input.Down || rope->GetPosition().y != GetPosition().y)
+    if (!rope || input.Down || rope->getPosition().y != getPosition().y)
         isHanging = false;
     
     if(isClimbing && isHanging)
@@ -89,14 +89,14 @@ void Character::Update(sf::Time frametime, Input input) {
         direction += sf::Vector2f(0, speed.y);       
     
     if (direction.y != 0) {
-        SetPosition(sf::Vector2f(position.x, position.y + direction.y * seconds));
+        setPosition(sf::Vector2f(position.x, position.y + direction.y * seconds));
               
-        Entity *b = world->GetCollidingSolid(GetBbox());
+        Entity *b = world->getCollidingSolid(getBbox());
         if (b != NULL) {
             if (direction.y < 0)
-                SetPosition(sf::Vector2f(position.x, b->GetBbox().Top + b->GetBbox().Height));
+                setPosition(sf::Vector2f(position.x, b->getBbox().Top + b->getBbox().Height));
             else {
-                SetPosition(sf::Vector2f(position.x, b->GetBbox().Top - GetBbox().Height));
+                setPosition(sf::Vector2f(position.x, b->getBbox().Top - getBbox().Height));
                 isFalling = false;
             }
         }
@@ -112,10 +112,10 @@ void Character::Update(sf::Time frametime, Input input) {
         }*/
         
         //Special case to walk on ladder
-        ladder = world->GetCollidingLadder(GetBbox());
-        if(ladder && direction.y > 0  && isFalling && ladder->GetPosition().y > position.y) {
+        ladder = world->getCollidingLadder(getBbox());
+        if(ladder && direction.y > 0  && isFalling && ladder->getPosition().y > position.y) {
             if(!input.Down)
-                SetPosition(sf::Vector2f(position.x, ladder->GetBbox().Top - GetBbox().Height));            
+                setPosition(sf::Vector2f(position.x, ladder->getBbox().Top - getBbox().Height));            
             isFalling = false;            
         }
                 
@@ -133,54 +133,54 @@ void Character::Update(sf::Time frametime, Input input) {
 
     //Update X pos, and solve collisions
     if (direction.x != 0) {
-        SetPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
+        setPosition(sf::Vector2f(position.x + direction.x * seconds, position.y));
         
         
-        Entity * b = world->GetCollidingEnnemy(GetBbox());
-        if (b != NULL && b != this && b != world->GetPlayer() && this != world->GetPlayer()) {
-            if (b->GetPosition().x < GetPosition().x)
-                SetPosition(GetPosition() + sf::Vector2f(speed.x / 2 * seconds, 0));                    
+        Entity * b = world->getCollidingEnnemy(getBbox());
+        if (b != NULL && b != this && b != world->getPlayer() && this != world->getPlayer()) {
+            if (b->getPosition().x < getPosition().x)
+                setPosition(getPosition() + sf::Vector2f(speed.x / 2 * seconds, 0));                    
             else 
-               SetPosition(GetPosition() - sf::Vector2f(speed.x / 2 * seconds, 0));            
+               setPosition(getPosition() - sf::Vector2f(speed.x / 2 * seconds, 0));            
         }
         
-        b = world->GetCollidingSolid(GetBbox());
+        b = world->getCollidingSolid(getBbox());
         if (b != NULL) {
             if (direction.x < 0)
-                SetPosition(sf::Vector2f(b->GetBbox().Left + b->GetBbox().Width, position.y));
+                setPosition(sf::Vector2f(b->getBbox().Left + b->getBbox().Width, position.y));
             else
-                SetPosition(sf::Vector2f(b->GetBbox().Left - GetBbox().Width, position.y));
+                setPosition(sf::Vector2f(b->getBbox().Left - getBbox().Width, position.y));
         }
         
         
     }
     
     if(direction.x == 0 )
-        AlignToGridX();
+        alignToGridX();
     
     if(direction.y == 0)
-        AlignToGridY();        
+        alignToGridY();        
 }
 
-void Character::SetSpeed(sf::Vector2f speed) {
+void Character::setSpeed(sf::Vector2f speed) {
     this->speed = speed;
 }
 
-sf::Vector2f Character::GetSpeed() {
+sf::Vector2f Character::getSpeed() {
     return speed;
 }
 
-void Character::Align(sf::Vector2f pos) {
+void Character::align(sf::Vector2f pos) {
     if(!isFalling)
-        SetPosition(pos);
+        setPosition(pos);
     else
-        SetPosition(sf::Vector2f(pos.x, GetPosition().y));
+        setPosition(sf::Vector2f(pos.x, getPosition().y));
 }
 
-void Character::AlignToGridX() {
-    SetPosition( sf::Vector2f((int)(GetCenter().x / Block::WIDTH) * Block::WIDTH + (Block::WIDTH - GetBbox().Width) / 2, GetPosition().y));
+void Character::alignToGridX() {
+    setPosition( sf::Vector2f((int)(getCenter().x / Block::WIDTH) * Block::WIDTH + (Block::WIDTH - getBbox().Width) / 2, getPosition().y));
 }
 
-void Character::AlignToGridY() {
-    SetPosition(sf::Vector2f(GetPosition().x, (int)(GetCenter().y / Block::HEIGHT) * Block::HEIGHT));
+void Character::alignToGridY() {
+    setPosition(sf::Vector2f(getPosition().x, (int)(getCenter().y / Block::HEIGHT) * Block::HEIGHT));
 }

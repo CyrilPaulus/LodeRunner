@@ -17,31 +17,31 @@ Entity::~Entity() {
     delete(image);
 }
 
-void Entity::Draw(sf::RenderTarget* rt) {
+void Entity::draw(sf::RenderTarget* rt) {
     rt->Draw(*image);
 }
 
-void Entity::SetColor(sf::Color color) {
+void Entity::setColor(sf::Color color) {
     image->SetColor(color);
 }
 
-sf::Vector2f Entity::GetPosition() {
+sf::Vector2f Entity::getPosition() {
     return position;
 }
 
-sf::FloatRect Entity::GetBbox() {
+sf::FloatRect Entity::getBbox() {
     return sf::FloatRect(position, bbox);
 }
 
-sf::Vector2f Entity::GetCenter() {
+sf::Vector2f Entity::getCenter() {
     return position + sf::Vector2f(bbox.x / 2, bbox.y / 2);
 }
 
-void Entity::SetBBox(sf::Vector2f bbox) {
+void Entity::setBBox(sf::Vector2f bbox) {
     this->bbox = bbox;
 }
 
-void Entity::SetPosition(sf::Vector2f position) {
+void Entity::setPosition(sf::Vector2f position) {
     this->position = position;
     image->SetPosition(position);
 }

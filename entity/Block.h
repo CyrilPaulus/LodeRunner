@@ -18,13 +18,13 @@ public:
     
     Block(int type);
     
-    void Update(sf::Time frametime);
-    void Draw(sf::RenderTarget* rt);
-    bool IsSolid();
-    bool IsLadder();
-    bool IsRope();
-    void SetActive(bool active);
-    int GetType();
+    void update(sf::Time frametime);
+    void draw(sf::RenderTarget* rt);
+    bool isSolid();
+    bool isLadder();
+    bool isRope();
+    void setActive(bool active);
+    int getType();
     
 private:
     

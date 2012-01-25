@@ -21,13 +21,13 @@ class Block;
 class AiAgent {
 public:
     AiAgent(World *w, Character *c);    
-    Input Update(sf::Time frametime);
+    Input update(sf::Time frametime);
     virtual ~AiAgent();
     
 private:
     World* world;
     Character* c;
-    std::list<Block*> ComputePath(int x0, int y0, int x1, int y1);
+    std::list<Block*> computePath(int x0, int y0, int x1, int y1);
     std::list<Block*> path;
     Block* current;
     sf::Time timer;

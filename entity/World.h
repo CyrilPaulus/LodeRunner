@@ -26,21 +26,21 @@ public:
     World();
     virtual ~World();
     
-    int Update(sf::Time frametime, Input in);
-    void Draw(sf::RenderTarget* rt);
-    Block* GetCollidingSolid(sf::FloatRect bbox);
-    Block* GetCollidingLadder(sf::FloatRect bbox);
-    Block* GetCollidingRope(sf::FloatRect bbox);
-    Character* GetCollidingEnnemy(sf::FloatRect bbox);
+    int update(sf::Time frametime, Input in);
+    void draw(sf::RenderTarget* rt);
+    Block* getCollidingSolid(sf::FloatRect bbox);
+    Block* getCollidingLadder(sf::FloatRect bbox);
+    Block* getCollidingRope(sf::FloatRect bbox);
+    Character* getCollidingEnnemy(sf::FloatRect bbox);
     
-    sf::Vector2f GetSize();
+    sf::Vector2f getSize();
     
-    Block* GetBlock(int x, int y);
-    std::list<Block*> GetNeighbors(int x, int y);
-    Character* GetPlayer();
+    Block* getBlock(int x, int y);
+    std::list<Block*> getNeighbors(int x, int y);
+    Character* getPlayer();
     
     
-    void LoadFromFile(std::string map);
+    void loadFromFile(std::string map);
 private:
     int width;
     int height;
@@ -51,12 +51,12 @@ private:
     std::vector<Character*> enemies;
     Character* player;
     AiManager* ai;
-    bool IsUnderRope(int x, int y);
-    void PushBlock(int x, int y, int type);
+    bool isUnderRope(int x, int y);
+    void addBlock(int x, int y, int type);
     
     
     
-    void Clean();
+    void clean();
     
     
     

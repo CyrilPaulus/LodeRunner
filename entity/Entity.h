@@ -15,16 +15,16 @@ public:
     Entity();
     virtual ~Entity();
     
-    void Draw(sf::RenderTarget *rt);
-    void SetColor(sf::Color color);
+    void draw(sf::RenderTarget *rt);
+    void setColor(sf::Color color);
         
-    sf::FloatRect GetBbox();
-    sf::Vector2f GetPosition(); 
-    sf::Vector2f GetCenter();
+    sf::FloatRect getBbox();
+    sf::Vector2f getPosition(); 
+    sf::Vector2f getCenter();
     
-    void SetPosition(sf::Vector2f pos);
-    void SetBBox(sf::Vector2f bbox);
-    void SetCenter(sf::Vector2f center);
+    void setPosition(sf::Vector2f pos);
+    void setBBox(sf::Vector2f bbox);
+    void setCenter(sf::Vector2f center);
     
 protected:    
     sf::Sprite* image;

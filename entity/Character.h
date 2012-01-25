@@ -16,12 +16,12 @@ class World;
 class Character : public Entity {
 public:
     Character(World *world);
-    void Update(sf::Time frametime, Input input);
-    void SetSpeed(sf::Vector2f speed);
-    sf::Vector2f GetSpeed();
-    void Align(sf::Vector2f pos);
-    void AlignToGridX();
-    void AlignToGridY();
+    void update(sf::Time frametime, Input input);
+    void setSpeed(sf::Vector2f speed);
+    sf::Vector2f getSpeed();
+    void align(sf::Vector2f pos);
+    void alignToGridX();
+    void alignToGridY();
     
 private:
     sf::Vector2f speed; 

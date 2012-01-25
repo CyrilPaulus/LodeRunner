@@ -21,11 +21,11 @@ AiManager::~AiManager() {
         delete((*it).second);
 }
 
-void AiManager::AddAgent(Character* c) {
+void AiManager::addAgent(Character* c) {
     AiAgent* a = new AiAgent(world, c);
     agents[c] = a;
 }
 
-Input AiManager::Update(Character* c, sf::Time frametime) {
-    return agents[c]->Update(frametime);
+Input AiManager::update(Character* c, sf::Time frametime) {
+    return agents[c]->update(frametime);
 }

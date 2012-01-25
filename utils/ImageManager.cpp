@@ -14,7 +14,7 @@ CImageManager::~CImageManager() {
         delete i->second;
 }
 
-const sf::Texture *CImageManager::get(std::string name) {
+const sf::Texture *CImageManager::getImage(std::string name) {
     sf::Texture *value = imageSet[name];
     if(value != NULL)
         return value;
