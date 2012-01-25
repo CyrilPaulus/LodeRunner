@@ -14,8 +14,11 @@ class Ticker {
 public:
     Ticker();
     Ticker(sf::Time tickTime);
-    bool Tick();
+    
+    bool tick();
+    
     sf::Time getElapsedTime();
+    
     void setRate(int tps);
     
 private:

@@ -24,41 +24,36 @@ public:
     enum {NOTHING, WIN, DEAD};
     
     World();
-    virtual ~World();
+    virtual ~World();    
     
-    int update(sf::Time frametime, Input in);
     void draw(sf::RenderTarget* rt);
+    void loadFromFile(std::string map);
+    int update(sf::Time frametime, Input in);
+    
+    Block* getBlock(int x, int y);
     Block* getCollidingSolid(sf::FloatRect bbox);
     Block* getCollidingLadder(sf::FloatRect bbox);
     Block* getCollidingRope(sf::FloatRect bbox);
     Character* getCollidingEnnemy(sf::FloatRect bbox);
-    
-    sf::Vector2f getSize();
-    
-    Block* getBlock(int x, int y);
     std::list<Block*> getNeighbors(int x, int y);
     Character* getPlayer();
+    sf::Vector2f getSize();    
     
-    
-    void loadFromFile(std::string map);
 private:
+       
+    void addBlock(int x, int y, int type);
+    void clean();
+    bool isUnderRope(int x, int y);   
+    
     int width;
     int height;
     bool completed;
     
+    AiManager* ai;
+    Character* player;
     std::vector<Block*> blocks;
     std::vector<Goal*> goals;
-    std::vector<Character*> enemies;
-    Character* player;
-    AiManager* ai;
-    bool isUnderRope(int x, int y);
-    void addBlock(int x, int y, int type);
-    
-    
-    
-    void clean();
-    
-    
+    std::vector<Character*> enemies;  
     
 };
 

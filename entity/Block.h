@@ -13,25 +13,28 @@
 class Block : public Entity {
 public:
     enum {EMPTY, WALL, CEMENT, LADDER, ROPE, FALSE, ENDLADDER};
-    static const int WIDTH = 36;
-    static const int HEIGHT = 30;
     
-    Block(int type);
+    Block(int type);   
     
-    void update(sf::Time frametime);
     void draw(sf::RenderTarget* rt);
     bool isSolid();
     bool isLadder();
     bool isRope();
-    void setActive(bool active);
+    void update(sf::Time frametime);
+    
     int getType();
+    
+    void setActive(bool active);    
+    
+    static const int WIDTH = 36;
+    static const int HEIGHT = 30;
     
 private:
     
-    static const char* file[];
-    int type;
     bool active;
+    static const char* file[];     
     sf::Time timer;
+    int type;   
 };
 
 #endif	/* BLOCK_H */

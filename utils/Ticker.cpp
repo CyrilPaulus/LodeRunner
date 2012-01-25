@@ -19,7 +19,7 @@ Ticker::Ticker(sf::Time ticktime) {
     elapsedTime = sf::Microseconds(0);
 }
 
-bool Ticker::Tick() {
+bool Ticker::tick() {
   elapsedTime = clock.GetElapsedTime();
   if(elapsedTime >= tickTime) {
     clock.Restart();  

@@ -17,33 +17,28 @@ class World;
 class Game : public Screen{
 public:
     Game(sf::RenderWindow *app);
-    Game(const Game& orig);
     virtual ~Game();
     
-    virtual int run();
     void loadMap(std::string file);
-    
+    virtual int run();    
     
 private:
     void draw(sf::RenderTarget *app);
-    void update(sf::Time frametime);
     void handleEvent(sf::Event event);
-    sf::RenderWindow *app;
-   
+    void update(sf::Time frametime);
+    void nextMap();
+    void prevMap();
+    
     //Event
     void onKeyPressed(sf::Event event);
     void onClose();
     
-    bool running;
-    Ticker* ticker;
-    
-    World* world;
+    sf::RenderWindow *app;    
     std::string map;
     int mapIndex;
-    
-    void nextMap();
-    void prevMap();
-
+    bool running;
+    Ticker* ticker;
+    World* world;
 };
 
 #endif	/* GAME_H */

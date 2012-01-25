@@ -16,23 +16,25 @@ class World;
 class Character : public Entity {
 public:
     Character(World *world);
+
     void update(sf::Time frametime, Input input);
-    void setSpeed(sf::Vector2f speed);
-    sf::Vector2f getSpeed();
+
     void align(sf::Vector2f pos);
     void alignToGridX();
     void alignToGridY();
-    
+
+    sf::Vector2f getSpeed();
+    void setSpeed(sf::Vector2f speed);
+
 private:
-    sf::Vector2f speed; 
-    sf::Vector2f direction;
-    bool moveX;
-    bool moveY;
+    bool canFall;
     bool isFalling;
     bool isClimbing;
     bool isHanging;
-    bool canFall;
-    
+
+    sf::Vector2f direction;
+    sf::Vector2f speed;
+
     World *world;
 };
 

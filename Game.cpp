@@ -42,7 +42,7 @@ int Game::run() {
             handleEvent(event);
         }
         
-        if(ticker->Tick())  
+        if(ticker->tick())  
           update(ticker->getElapsedTime());
         
         //Draw screen

@@ -17,10 +17,11 @@ class AiAgent;
 class AiManager {
 public:
     AiManager(World* w);
-    AiManager(const AiManager& orig);
+    virtual ~AiManager();
+  
     void addAgent(Character *c);
     Input update(Character *c, sf::Time frametime);
-    virtual ~AiManager();
+    
 private:
     std::map<Character*, AiAgent*> agents;
     World *world;
