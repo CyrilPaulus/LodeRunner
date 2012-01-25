@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "Block.h"
 #include "World.h"
+#include <math.h>
 Character::Character(World *w) : Entity() {
     image->SetTexture(*ImageManager::getInstance()->get("them"));
     SetBBox(sf::Vector2f(24, 30));

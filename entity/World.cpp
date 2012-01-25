@@ -31,6 +31,7 @@ World::~World() {
 }
 
 void World::Clean() {
+    delete ai;
     std::vector<Block*>::iterator it;
     for (it = blocks.begin(); it != blocks.end(); it++)
         free(*it);
@@ -43,11 +44,11 @@ void World::Clean() {
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
         free(*enm);
 
-
-
-    blocks.empty();
-    goals.empty();
+    blocks.clear();
+    goals.clear();
+    enemies.clear();
     completed = false;
+    ai = new AiManager(this);
 }
 
 void World::Draw(sf::RenderTarget* rt) {

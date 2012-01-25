@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include "Screen.h"
 #include "Game.h"
+#include <iostream>
 
 
 /*
@@ -23,11 +24,23 @@ int main(int argc, char** argv) {
     sf::RenderWindow app(sf::VideoMode(800,600), "LodeRunner");
     app.ShowMouseCursor(false);
     
-    Game game;
+    Game game(&app);
     screens.push_back(&game);
     
+    //Check arguments
+    if(argc != 0) {
+        for(int i = 0; i < argc; i++) {
+            std::string arg = std::string(argv[i]);           
+            if(arg.compare("-m") == 0 && i + 1 < argc) {
+                std::cout << "Loading Map : " << argv[i + 1] << std::endl;
+                game.LoadMap(argv[i+1]);
+            }
+        }
+    }    
+    
+    
     while(screen != Screen::EXIT) {
-        screen = screens[screen]->Run(&app);
+        screen = screens[screen]->Run();
     }
     
     ImageManager::release();

@@ -13,7 +13,7 @@
 class Screen {
 public:
     enum {EXIT = -1, GAME};
-    virtual int Run (sf::RenderWindow *app) = 0;
+    virtual int Run () = 0;
     
 private:
 

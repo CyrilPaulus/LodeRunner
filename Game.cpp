@@ -12,12 +12,14 @@
 #include "entity/World.h"
 
 
-Game::Game() {
+Game::Game(sf::RenderWindow *app) {
     running = false;
     ticker = new Ticker();
     ticker->setRate(50);
     
     world = new World();
+    this->app = app;
+    LoadMap("res/map/map10");
 }
 
 Game::~Game() {
@@ -25,14 +27,10 @@ Game::~Game() {
     delete(world);
 }
 
-int Game::Run(sf::RenderWindow *app) {
+int Game::Run() {
     running = true;
-    world->LoadFromFile("res/map/map5");
-    app->SetSize(world->GetSize().x, world->GetSize().y);
-    sf::View v = sf::View(sf::FloatRect(Block::WIDTH, Block::HEIGHT, world->GetSize().x - 2*Block::WIDTH, world->GetSize().y - 2*Block::HEIGHT));
-    app->SetView(v);
-    
     sf::Event event;
+    
     while(running) {
         
         //Manage event
@@ -93,7 +91,12 @@ void Game::OnKeyPressed(sf::Event event) {
 
 void Game::Draw(sf::RenderTarget *rt) {
     rt->Clear(sf::Color(150,150,150));  
-    world->Draw(rt);
-   
-    
+    world->Draw(rt);    
+}
+
+void Game::LoadMap(char* file) {
+    world->LoadFromFile(file);
+    app->SetSize(world->GetSize().x, world->GetSize().y);
+    sf::View v = sf::View(sf::FloatRect(Block::WIDTH, Block::HEIGHT, world->GetSize().x - 2*Block::WIDTH, world->GetSize().y - 2*Block::HEIGHT));
+    app->SetView(v);
 }

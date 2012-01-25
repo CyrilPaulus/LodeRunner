@@ -131,6 +131,7 @@ Input AiAgent::Update(unsigned int frametime) {
 
         int x1 = world->GetPlayer()->GetPosition().x / Block::WIDTH;
         int y1 = world->GetPlayer()->GetPosition().y / Block::HEIGHT;
+        
         path = ComputePath(x0, y0, x1, y1);
         
     }   

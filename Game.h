@@ -16,16 +16,18 @@ class World;
 
 class Game : public Screen{
 public:
-    Game();
+    Game(sf::RenderWindow *app);
     Game(const Game& orig);
     virtual ~Game();
     
-    virtual int Run(sf::RenderWindow *app);
+    virtual int Run();
+    void LoadMap(char* file);
     
 private:
     void Draw(sf::RenderTarget *app);
     void Update(unsigned int frametime);
     void HandleEvent(sf::Event event);
+    sf::RenderWindow *app;
    
     //Event
     void OnKeyPressed(sf::Event event);
