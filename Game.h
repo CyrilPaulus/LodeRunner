@@ -21,7 +21,8 @@ public:
     virtual ~Game();
     
     virtual int Run();
-    void LoadMap(char* file);
+    void LoadMap(std::string file);
+    
     
 private:
     void Draw(sf::RenderTarget *app);
@@ -37,6 +38,11 @@ private:
     Ticker* ticker;
     
     World* world;
+    std::string map;
+    int mapIndex;
+    
+    void NextMap();
+    void PrevMap();
 
 };
 

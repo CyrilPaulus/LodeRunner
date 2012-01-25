@@ -98,9 +98,9 @@ void World::Update(unsigned int frametime, Input input) {
 
 }
 
-void World::LoadFromFile(char* filename) {
+void World::LoadFromFile(std::string filename) {
     Clean();
-    FILE *f = fopen(filename, "r");
+    FILE *f = fopen(filename.c_str(), "r");
     if (!f) {
         std::cerr << "Can't load file: " << filename << std::endl;
         return;

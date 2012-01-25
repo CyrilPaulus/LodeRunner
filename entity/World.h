@@ -38,7 +38,7 @@ public:
     Character* GetPlayer();
     
     
-    void LoadFromFile(char* filename);
+    void LoadFromFile(std::string map);
 private:
     int width;
     int height;

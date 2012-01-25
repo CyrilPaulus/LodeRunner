@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <sstream>
 #include "Game.h"
 
 #include "entity/Block.h"
@@ -18,8 +19,11 @@ Game::Game(sf::RenderWindow *app) {
     ticker->setRate(50);
     
     world = new World();
-    this->app = app;
+    mapIndex = 0;
+    this->app = app;    
     LoadMap("res/map/map10");
+    
+    
 }
 
 Game::~Game() {
@@ -32,6 +36,7 @@ int Game::Run() {
     sf::Event event;
     
     while(running) {
+        std::cout << mapIndex << std::endl;
         
         //Manage event
         while(app->PollEvent(event)) {
@@ -59,7 +64,6 @@ void Game::Update(unsigned int frametime) {
     input.RightCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::Z);
     
     world->Update(frametime, input);
-
 }
 
 void Game::HandleEvent(sf::Event event) {
@@ -84,6 +88,12 @@ void Game::OnKeyPressed(sf::Event event) {
         case sf::Keyboard::Escape:
             OnClose();
             break;
+        case sf::Keyboard::N:
+            NextMap();
+            break;
+        case sf::Keyboard::P:
+            PrevMap();
+            break;
         default:
             break;
     }
@@ -94,9 +104,30 @@ void Game::Draw(sf::RenderTarget *rt) {
     world->Draw(rt);    
 }
 
-void Game::LoadMap(char* file) {
+void Game::LoadMap(std::string file) {
+    std::cout << "Loading :" << file << std::endl;
+    map = file;
     world->LoadFromFile(file);
     app->SetSize(world->GetSize().x, world->GetSize().y);
     sf::View v = sf::View(sf::FloatRect(Block::WIDTH, Block::HEIGHT, world->GetSize().x - 2*Block::WIDTH, world->GetSize().y - 2*Block::HEIGHT));
     app->SetView(v);
+}
+
+void Game::NextMap() {    
+    mapIndex++;    
+    std::cout << mapIndex << std::endl;
+    std::ostringstream nextMap;
+    nextMap << "res/map/map" << mapIndex;    
+    LoadMap(nextMap.str());    
+}
+
+void Game::PrevMap() {    
+    if(mapIndex > 0) {
+        mapIndex--;
+        std::cout << mapIndex << std::endl;
+        std::ostringstream nextMap;
+         nextMap << "res/map/map" << mapIndex; 
+
+        LoadMap(nextMap.str());
+    }
 }
