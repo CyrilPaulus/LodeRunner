@@ -12,9 +12,6 @@ AiManager::AiManager(World* w) {
     world = w;
 }
 
-AiManager::AiManager(const AiManager& orig) {
-}
-
 AiManager::~AiManager() {
     std::map<Character*, AiAgent*>::iterator it;
     for(it = agents.begin(); it != agents.end(); it++)
