@@ -20,6 +20,7 @@ public:
     bool isSolid();
     bool isLadder();
     bool isRope();
+    bool isAiSolid();
     void update(sf::Time frametime);
     
     int getType();

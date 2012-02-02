@@ -230,7 +230,7 @@ std::list<Block*> World::getNeighbors(int x, int y) {
     Block* current = getBlock(x, y);
     bool isSolidUnderCurrent = false;
     if (y + 1 < height)
-        isSolidUnderCurrent = getBlock(x, y + 1)->isSolid() || getBlock(x, y + 1)->isLadder();
+        isSolidUnderCurrent = getBlock(x, y + 1)->isAiSolid() || getBlock(x, y + 1)->isLadder();
 
     int xs[] = {x, x - 1, x + 1, x};
     int ys[] = {y - 1, y, y, y + 1};
@@ -245,12 +245,12 @@ std::list<Block*> World::getNeighbors(int x, int y) {
 
         if ((candidate->isLadder() || candidate->isRope()) && (i == 1 || i == 2))
             value.push_back(candidate);
-        else if (!candidate->isSolid() && (i == 1 || i == 2) &&
+        else if (!candidate->isAiSolid() && (i == 1 || i == 2) &&
                 (current->isLadder() || current->isRope() || isSolidUnderCurrent))
             value.push_back(candidate);
-        else if (!candidate->isSolid() && i == 3)
+        else if (!candidate->isAiSolid() && i == 3)
             value.push_back(candidate);
-        else if (!(candidate->isSolid()) && i == 0
+        else if (!(candidate->isAiSolid()) && i == 0
                 && current->isLadder())
             value.push_back(candidate);
     }

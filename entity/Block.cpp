@@ -51,6 +51,10 @@ bool Block::isSolid() {
     return active && (type == Block::CEMENT || type == Block::WALL);
 }
 
+bool Block::isAiSolid() {
+    return (type == Block::CEMENT || type == Block::WALL);
+}
+
 bool Block::isLadder() {
     return (type == Block::LADDER || type == Block::ENDLADDER) && active;
 }
