@@ -8,6 +8,8 @@
 #include "World.h"
 #include <stdio.h>
 #include <iostream>
+#include <math.h>
+#include <SFML/Graphics/Rect.hpp>
 
 #include "../ai/AiManager.h"
 #include "../entity/Block.h"
@@ -95,9 +97,9 @@ int World::update(sf::Time frametime, Input input) {
                 (*it)->setActive(true);
     }
 
-    if (completed && player->getPosition().y <= 30) 
+    if (completed && player->getPosition().y <= 30)
         return World::WIN;
-     else
+    else
         return World::NOTHING;
 }
 
@@ -152,40 +154,46 @@ void World::loadFromFile(std::string filename) {
 
 Block* World::getCollidingSolid(sf::FloatRect bbox) {
 
-    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+    for (int j = (bbox.Top / Block::HEIGHT) - 1; j <= (bbox.Top / Block::HEIGHT) + 1; j++)
+        for (int i = (bbox.Left / Block::WIDTH) - 1; i <= (bbox.Left / Block::WIDTH) + 1; i++) {
             Block *candidate = getBlock(i, j);
-            if (candidate->getBbox().Intersects(bbox) && candidate->isSolid()) {
+            if (candidate->getBbox().Intersects(bbox) && candidate->isSolid())
                 return candidate;
-
-            }
         }
 
     return NULL;
 }
 
 Character* World::getCollidingEnnemy(sf::FloatRect bbox) {
-std::vector<Character*>::iterator enm;
+    std::vector<Character*>::iterator enm;
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
-        if((*enm)->getBbox().Intersects(bbox))
+        if ((*enm)->getBbox().Intersects(bbox))
             return *enm;
-    
+
     return NULL;
 }
 
 Block* World::getCollidingLadder(sf::FloatRect bbox) {
 
+    float min = -1;
+    Block *minB = NULL;
     for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
         for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
 
+
             Block *candidate = getBlock(i, j);
             if (candidate->getBbox().Intersects(bbox) && candidate->isLadder()) {
-                return candidate;
-
+                float diffX = pow(candidate->getCenter().x - bbox.Left + 0.5 * bbox.Width, 2);
+                float diffY = pow(candidate->getCenter().y - bbox.Top + 0.5 * bbox.Height, 2);
+                float dist = diffX + diffY;
+                if (min == -1 || dist < min) {
+                    min = dist;
+                    minB = candidate;
+                }
             }
         }
 
-    return NULL;
+    return minB;
 }
 
 Block* World::getCollidingRope(sf::FloatRect bbox) {
@@ -250,8 +258,10 @@ std::list<Block*> World::getNeighbors(int x, int y) {
 }
 
 Block* World::getBlock(int x, int y) {
-    //Need to offset for the border
-    return blocks[y * width + x];
+    if (x >= 0 && x < width && y >= 0 && y < height)
+        return blocks[y * width + x];
+    else
+        return NULL;
 
 }
 

@@ -139,10 +139,10 @@ Input AiAgent::update(sf::Time frametime) {
     }   
     
     //FUCK YEAH
-    for(std::list<Block*>::iterator it = path.begin(); it != path.end(); it++){
+  /* for(std::list<Block*>::iterator it = path.begin(); it != path.end(); it++){
        long color = reinterpret_cast<long>(this);       
         (*it)->setColor(sf::Color(color, color >> 8, color >> 16));
-    }
+    }*/
     
     if(!path.empty()) {
         Block* first = path.front();
