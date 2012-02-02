@@ -39,6 +39,8 @@ private:
     sf::Vector2f direction;
     sf::Vector2f speed;
     sf::Vector2f origin;
+    
+    Input lastInput;
 
     World *world;
 };

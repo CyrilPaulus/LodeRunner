@@ -45,8 +45,8 @@ void Block::update(sf::Time frametime, World *world) {
             }
         }
         
-        if(timer >= sf::Seconds(3)){
-            timer = sf::Seconds(0);
+        if(timer >= sf::Seconds(10)){
+            timer = sf::Time::Zero;
             active = true;
             if(trapped) {
                 trapped->setMoveable(true);

@@ -9,6 +9,7 @@
 #include "Block.h"
 #include "World.h"
 #include <math.h>
+#include <iostream>
 
 Character::Character(World *w) : Entity() {
     image->SetTexture(*ImageManager::getInstance()->getImage("them"));
@@ -21,7 +22,7 @@ Character::Character(World *w) : Entity() {
     isClimbing = false;
     world = w;
     direction = sf::Vector2f(0, 0);
-    origin = sf::Vector2f(0,0);
+    origin = sf::Vector2f(0,0);  
 }
 
 void Character::update(sf::Time frametime, Input input) {
@@ -34,20 +35,21 @@ void Character::update(sf::Time frametime, Input input) {
     float seconds = frametime.AsSeconds();
 
     //Carve
-    if (input.LeftCarve) {
+
+    if (input.LeftCarve && !lastInput.LeftCarve) {
         Block* b = world->getBlock(x0 - 1, y0 + 1);
         Block* c = world->getBlock(x0 - 1, y0);
         if (b && b->getType() == Block::WALL && !c->isSolid() && !c->isLadder() && !c->isRope())
             b->setActive(false);
     }
 
-    if (input.RightCarve) {
+    if (input.RightCarve && !lastInput.RightCarve) {
         Block* b = world->getBlock(x0 + 1, y0 + 1);
         Block* c = world->getBlock(x0 + 1, y0);
         if (b && b->getType() == Block::WALL && !c->isSolid() && !c->isLadder() && !c->isRope())
             b->setActive(false);
     }
-
+        lastInput = input;
     sf::Vector2f direction = sf::Vector2f(0, 0);
     Block* rope = world->getCollidingRope(getBbox());
     Block* ladder = world->getCollidingLadder(getBbox());
