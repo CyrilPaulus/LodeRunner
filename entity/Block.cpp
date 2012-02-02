@@ -6,9 +6,12 @@
  */
 
 #include <SFML/System/Time.hpp>
+#include <list>
 
 #include "Entity.h"
 #include "Block.h"
+#include "World.h"
+#include "Character.h"
 
 
 const char* Block::file[] = {"map/empty", "map/wall", "map/cement", "map/ladder", 
@@ -24,14 +27,32 @@ Block::Block(int type) : Entity(){
     else
         active = true;
     timer = sf::Seconds(0);
+    trapped = false;
 }
 
-void Block::update(sf::Time frametime) {
+void Block::update(sf::Time frametime, World *world) {
     if(!active && type == Block::WALL){
         timer += frametime;
+        
+        if(trapped == NULL) {
+            std::list<Character*> ennemies = world->getEnnemies();
+            std::list<Character*>::iterator en;
+            for(en = ennemies.begin(); en != ennemies.end(); en++) {
+                if((*en)->getBbox().Intersects(getBbox()) && (*en)->getPosition().y >= position.y){
+                    (*en)->setMoveable(false);
+                    trapped = (*en);
+                }
+            }
+        }
+        
         if(timer >= sf::Seconds(3)){
             timer = sf::Seconds(0);
             active = true;
+            if(trapped) {
+                trapped->setMoveable(true);
+                trapped->resetToOrigin();
+                trapped = NULL;
+            }
         }
             
     }
@@ -48,7 +69,7 @@ void Block::draw(sf::RenderTarget* rt) {
 }
 
 bool Block::isSolid() {
-    return active && (type == Block::CEMENT || type == Block::WALL);
+    return (active || trapped != NULL) && (type == Block::CEMENT || type == Block::WALL);
 }
 
 bool Block::isAiSolid() {

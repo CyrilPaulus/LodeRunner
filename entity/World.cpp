@@ -42,7 +42,7 @@ void World::clean() {
     for (git = goals.begin(); git != goals.end(); git++)
         free(*git);
 
-    std::vector<Character*>::iterator enm;
+    std::list<Character*>::iterator enm;
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
         free(*enm);
 
@@ -63,7 +63,7 @@ void World::draw(sf::RenderTarget* rt) {
     for (git = goals.begin(); git != goals.end(); git++)
         (*git)->draw(rt);
 
-    std::vector<Character*>::iterator enm;
+    std::list<Character*>::iterator enm;
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
         (*enm)->draw(rt);
 
@@ -73,12 +73,12 @@ void World::draw(sf::RenderTarget* rt) {
 int World::update(sf::Time frametime, Input input) {
     std::vector<Block*>::iterator it;
     for (it = blocks.begin(); it != blocks.end(); it++) {
-        (*it)->update(frametime);
+        (*it)->update(frametime, this);
         (*it)->setColor(sf::Color(255, 255, 255));
     }
     player->update(frametime, input);
 
-    std::vector<Character*>::iterator cit;
+    std::list<Character*>::iterator cit;
     for (cit = enemies.begin(); cit != enemies.end(); cit++)
         (*cit)->update(frametime, ai->update((*cit), frametime));
 
@@ -134,7 +134,8 @@ void World::loadFromFile(std::string filename) {
 
             else if (value == 8) {
                 Character* en = new Character(this);
-                en->setPosition(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+                en->setOrigin(sf::Vector2f(i * Block::WIDTH, j * Block::HEIGHT));
+                en->resetToOrigin();
                 en->setSpeed(sf::Vector2f(175, 150));
                 enemies.push_back(en);
                 ai->addAgent(en);
@@ -165,7 +166,7 @@ Block* World::getCollidingSolid(sf::FloatRect bbox) {
 }
 
 Character* World::getCollidingEnnemy(sf::FloatRect bbox) {
-    std::vector<Character*>::iterator enm;
+    std::list<Character*>::iterator enm;
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
         if ((*enm)->getBbox().Intersects(bbox))
             return *enm;
@@ -280,3 +281,6 @@ void World::addBlock(int i, int j, int value) {
     blocks.push_back(b);
 }
 
+std::list<Character*> World::getEnnemies() {
+    return enemies;
+}

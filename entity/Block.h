@@ -10,6 +10,9 @@
 
 #include "Entity.h"
 
+class World;
+class Character;
+
 class Block : public Entity {
 public:
     enum {EMPTY, WALL, CEMENT, LADDER, ROPE, FALSE, ENDLADDER};
@@ -21,7 +24,7 @@ public:
     bool isLadder();
     bool isRope();
     bool isAiSolid();
-    void update(sf::Time frametime);
+    void update(sf::Time frametime, World* world);
     
     int getType();
     
@@ -35,7 +38,8 @@ private:
     bool active;
     static const char* file[];     
     sf::Time timer;
-    int type;   
+    int type;
+    Character* trapped;
 };
 
 #endif	/* BLOCK_H */

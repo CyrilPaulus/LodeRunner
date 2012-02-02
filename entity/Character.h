@@ -25,15 +25,20 @@ public:
 
     sf::Vector2f getSpeed();
     void setSpeed(sf::Vector2f speed);
+    void setMoveable(bool canMove);
+    void setOrigin(sf::Vector2f origin);
+    void resetToOrigin();
 
 private:
     bool canFall;
     bool isFalling;
     bool isClimbing;
     bool isHanging;
+    bool canMove;
 
     sf::Vector2f direction;
     sf::Vector2f speed;
+    sf::Vector2f origin;
 
     World *world;
 };

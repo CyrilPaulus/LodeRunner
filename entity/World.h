@@ -35,6 +35,7 @@ public:
     Block* getCollidingLadder(sf::FloatRect bbox);
     Block* getCollidingRope(sf::FloatRect bbox);
     Character* getCollidingEnnemy(sf::FloatRect bbox);
+    std::list<Character*> getEnnemies();
     std::list<Block*> getNeighbors(int x, int y);
     Character* getPlayer();
     sf::Vector2f getSize();    
@@ -53,7 +54,7 @@ private:
     Character* player;
     std::vector<Block*> blocks;
     std::vector<Goal*> goals;
-    std::vector<Character*> enemies;  
+    std::list<Character*> enemies;  
     
 };
 

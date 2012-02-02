@@ -16,14 +16,19 @@ Character::Character(World *w) : Entity() {
     speed = sf::Vector2f(250, 150);
     isFalling = false;
     canFall = true;
+    canMove = true;
     isHanging = false;
     isClimbing = false;
     world = w;
     direction = sf::Vector2f(0, 0);
+    origin = sf::Vector2f(0,0);
 }
 
 void Character::update(sf::Time frametime, Input input) {
 
+    if(!canMove)
+        return;
+    
     int x0 = position.x / Block::WIDTH;
     int y0 = position.y / Block::HEIGHT;
     float seconds = frametime.AsSeconds();
@@ -178,4 +183,16 @@ void Character::alignToGridX() {
 
 void Character::alignToGridY() {
     setPosition(sf::Vector2f(getPosition().x, (int) (getCenter().y / Block::HEIGHT) * Block::HEIGHT));
+}
+
+void Character::setMoveable(bool canMove) {
+    this->canMove = canMove;
+}
+
+void Character::setOrigin(sf::Vector2f origin) {
+    this->origin = origin;
+}
+
+void Character::resetToOrigin() {
+    setPosition(origin);
 }
