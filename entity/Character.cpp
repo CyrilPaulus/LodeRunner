@@ -12,7 +12,7 @@
 #include <iostream>
 
 Character::Character(World *w) : Entity() {
-    image->SetTexture(*ImageManager::getInstance()->getImage("them"));
+    image->setTexture(*ImageManager::getInstance()->getImage("them"));
     setBBox(sf::Vector2f(24, 30));
     speed = sf::Vector2f(250, 150);
     isFalling = false;
@@ -32,7 +32,7 @@ void Character::update(sf::Time frametime, Input input) {
     
     int x0 = position.x / Block::WIDTH;
     int y0 = position.y / Block::HEIGHT;
-    float seconds = frametime.AsSeconds();
+    float seconds = frametime.asSeconds();
 
     //Carve
 
@@ -108,9 +108,9 @@ void Character::update(sf::Time frametime, Input input) {
         Entity *b = world->getCollidingSolid(getBbox());
         while (b != NULL) {
             if (direction.y < 0)
-                setPosition(sf::Vector2f(position.x, b->getBbox().Top + b->getBbox().Height));
+                setPosition(sf::Vector2f(position.x, b->getBbox().top + b->getBbox().height));
             else {
-                setPosition(sf::Vector2f(position.x, b->getBbox().Top - getBbox().Height));
+                setPosition(sf::Vector2f(position.x, b->getBbox().top - getBbox().height));
                 isFalling = false;
             }
             b = world->getCollidingSolid(getBbox());
@@ -118,8 +118,8 @@ void Character::update(sf::Time frametime, Input input) {
 
         //Walk on ladder
         b = world->getCollidingLadder(getBbox());
-        if (b && b->getPosition().y > getBbox().Top && isFalling && !input.Down) {
-            setPosition(sf::Vector2f(position.x, b->getBbox().Top - getBbox().Height));
+        if (b && b->getPosition().y > getBbox().top && isFalling && !input.Down) {
+            setPosition(sf::Vector2f(position.x, b->getBbox().top - getBbox().height));
             isFalling = false;
         }
     }
@@ -149,9 +149,9 @@ void Character::update(sf::Time frametime, Input input) {
         b = world->getCollidingSolid(getBbox());
         if (b != NULL) {
             if (direction.x < 0)
-                setPosition(sf::Vector2f(b->getBbox().Left + b->getBbox().Width, position.y));
+                setPosition(sf::Vector2f(b->getBbox().left + b->getBbox().width, position.y));
             else
-                setPosition(sf::Vector2f(b->getBbox().Left - getBbox().Width, position.y));
+                setPosition(sf::Vector2f(b->getBbox().left - getBbox().width, position.y));
         }
 
 
@@ -180,7 +180,7 @@ void Character::align(sf::Vector2f pos) {
 }
 
 void Character::alignToGridX() {
-    setPosition(sf::Vector2f((int) (getCenter().x / Block::WIDTH) * Block::WIDTH + (Block::WIDTH - getBbox().Width) / 2, getPosition().y));
+    setPosition(sf::Vector2f((int) (getCenter().x / Block::WIDTH) * Block::WIDTH + (Block::WIDTH - getBbox().width) / 2, getPosition().y));
 }
 
 void Character::alignToGridY() {

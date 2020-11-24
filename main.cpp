@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     int screen = Screen::GAME;
     
     sf::RenderWindow app(sf::VideoMode(800,600), "LodeRunner");
-    app.ShowMouseCursor(false);
+    app.setMouseCursorVisible(false);
     
     Game game(&app);
     screens.push_back(&game);

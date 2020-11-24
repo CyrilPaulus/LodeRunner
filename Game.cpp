@@ -38,7 +38,7 @@ int Game::run() {
     while(running) {
                 
         //Manage event
-        while(app->PollEvent(event)) {
+        while(app->pollEvent(event)) {
             handleEvent(event);
         }
         
@@ -47,7 +47,7 @@ int Game::run() {
         
         //Draw screen
         draw(app);
-        app->Display();
+        app->display();
     }
     
     return Screen::EXIT;
@@ -55,12 +55,12 @@ int Game::run() {
 
 void Game::update(sf::Time frametime) {
     Input input;
-    input.Left = sf::Keyboard::IsKeyPressed(sf::Keyboard::Left);
-    input.Right = sf::Keyboard::IsKeyPressed(sf::Keyboard::Right);
-    input.Up = sf::Keyboard::IsKeyPressed(sf::Keyboard::Up);
-    input.Down = sf::Keyboard::IsKeyPressed(sf::Keyboard::Down);
-    input.LeftCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::A);
-    input.RightCarve = sf::Keyboard::IsKeyPressed(sf::Keyboard::Z);
+    input.Left = sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+    input.Right = sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+    input.Up = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+    input.Down = sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+    input.LeftCarve = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
+    input.RightCarve = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
     
     int status = world->update(frametime, input);
     switch(status) {
@@ -73,7 +73,7 @@ void Game::update(sf::Time frametime) {
 }
 
 void Game::handleEvent(sf::Event event) {
-    switch(event.Type) {
+    switch(event.type) {
         case sf::Event::Closed:
             onClose();
             break;
@@ -90,7 +90,7 @@ void Game::onClose() {
 }
 
 void Game::onKeyPressed(sf::Event event) {
-    switch(event.Key.Code) {
+    switch(event.key.code) {
         case sf::Keyboard::Escape:
             onClose();
             break;
@@ -106,7 +106,7 @@ void Game::onKeyPressed(sf::Event event) {
 }
 
 void Game::draw(sf::RenderTarget *rt) {
-    rt->Clear(sf::Color(150,150,150));  
+    rt->clear(sf::Color(150,150,150));
     world->draw(rt);    
 }
 
@@ -114,9 +114,9 @@ void Game::loadMap(std::string file) {
     std::cout << "Loading :" << file << std::endl;
     map = file;
     world->loadFromFile(file);
-    app->SetSize(world->getSize().x, world->getSize().y);
+    app->setSize(sf::Vector2u(world->getSize().x, world->getSize().y));
     sf::View v = sf::View(sf::FloatRect(Block::WIDTH, Block::HEIGHT, world->getSize().x - 2*Block::WIDTH, world->getSize().y - 2*Block::HEIGHT));
-    app->SetView(v);
+    app->setView(v);
 }
 
 void Game::nextMap() {    

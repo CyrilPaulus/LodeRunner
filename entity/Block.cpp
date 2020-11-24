@@ -20,14 +20,14 @@ const char* Block::file[] = {"map/empty", "map/wall", "map/cement", "map/ladder"
 Block::Block(int type) : Entity(){
     this->type = type;
     //if(type != Block::EMPTY)
-        image->SetTexture(*ImageManager::getInstance()->getImage(file[type]));
+        image->setTexture(*ImageManager::getInstance()->getImage(file[type]));
     setBBox(sf::Vector2f(Block::WIDTH, Block::HEIGHT));
     if(type == Block::ENDLADDER)
         active = false;
     else
         active = true;
-    timer = sf::Seconds(0);
-    trapped = false;
+    timer = sf::seconds(0);
+    trapped = NULL;
 }
 
 void Block::update(sf::Time frametime, World *world) {
@@ -38,14 +38,14 @@ void Block::update(sf::Time frametime, World *world) {
             std::list<Character*> ennemies = world->getEnnemies();
             std::list<Character*>::iterator en;
             for(en = ennemies.begin(); en != ennemies.end(); en++) {
-                if((*en)->getBbox().Intersects(getBbox()) && (*en)->getPosition().y >= position.y){
+                if((*en)->getBbox().intersects(getBbox()) && (*en)->getPosition().y >= position.y){
                     (*en)->setMoveable(false);
                     trapped = (*en);
                 }
             }
         }
         
-        if(timer >= sf::Seconds(10)){
+        if(timer >= sf::seconds(10)){
             timer = sf::Time::Zero;
             active = true;
             if(trapped) {

@@ -10,19 +10,19 @@
 #include "Ticker.h"
 
 Ticker::Ticker() {
-    tickTime = sf::Milliseconds(25);
-    elapsedTime = sf::Microseconds(0);
+    tickTime = sf::milliseconds(25);
+    elapsedTime = sf::microseconds(0);
 }
 
 Ticker::Ticker(sf::Time ticktime) {
     this->tickTime = tickTime;
-    elapsedTime = sf::Microseconds(0);
+    elapsedTime = sf::microseconds(0);
 }
 
 bool Ticker::tick() {
-  elapsedTime = clock.GetElapsedTime();
+  elapsedTime = clock.getElapsedTime();
   if(elapsedTime >= tickTime) {
-    clock.Restart();  
+    clock.restart();
     return true;
   }
   return false;
@@ -33,5 +33,5 @@ sf::Time Ticker::getElapsedTime() {
 }
 
 void Ticker::setRate(int tps) {
-    tickTime = sf::Milliseconds(1000 / tps);
+    tickTime = sf::milliseconds(1000 / tps);
 }

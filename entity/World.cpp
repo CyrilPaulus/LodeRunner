@@ -84,7 +84,7 @@ int World::update(sf::Time frametime, Input input) {
 
     std::vector<Goal*>::iterator git;
     for (git = goals.begin(); git != goals.end(); git++)
-        if (player->getBbox().Intersects((*git)->getBbox())) {
+        if (player->getBbox().intersects((*git)->getBbox())) {
             delete(*git);
             git = goals.erase(git);
             git--;
@@ -155,10 +155,10 @@ void World::loadFromFile(std::string filename) {
 
 Block* World::getCollidingSolid(sf::FloatRect bbox) {
 
-    for (int j = (bbox.Top / Block::HEIGHT) - 1; j <= (bbox.Top / Block::HEIGHT) + 1; j++)
-        for (int i = (bbox.Left / Block::WIDTH) - 1; i <= (bbox.Left / Block::WIDTH) + 1; i++) {
+    for (int j = (bbox.top / Block::HEIGHT) - 1; j <= (bbox.top / Block::HEIGHT) + 1; j++)
+        for (int i = (bbox.left / Block::WIDTH) - 1; i <= (bbox.left / Block::WIDTH) + 1; i++) {
             Block *candidate = getBlock(i, j);
-            if (candidate->getBbox().Intersects(bbox) && candidate->isSolid())
+            if (candidate->getBbox().intersects(bbox) && candidate->isSolid())
                 return candidate;
         }
 
@@ -168,7 +168,7 @@ Block* World::getCollidingSolid(sf::FloatRect bbox) {
 Character* World::getCollidingEnnemy(sf::FloatRect bbox) {
     std::list<Character*>::iterator enm;
     for (enm = enemies.begin(); enm != enemies.end(); enm++)
-        if ((*enm)->getBbox().Intersects(bbox))
+        if ((*enm)->getBbox().intersects(bbox))
             return *enm;
 
     return NULL;
@@ -178,14 +178,14 @@ Block* World::getCollidingLadder(sf::FloatRect bbox) {
 
     float min = -1;
     Block *minB = NULL;
-    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+    for (int j = bbox.top / Block::HEIGHT; j <= (bbox.top + bbox.height) / Block::HEIGHT; j++)
+        for (int i = bbox.left / Block::WIDTH; i <= (bbox.left + bbox.width) / Block::WIDTH; i++) {
 
 
             Block *candidate = getBlock(i, j);
-            if (candidate->getBbox().Intersects(bbox) && candidate->isLadder()) {
-                float diffX = pow(candidate->getCenter().x - bbox.Left + 0.5 * bbox.Width, 2);
-                float diffY = pow(candidate->getCenter().y - bbox.Top + 0.5 * bbox.Height, 2);
+            if (candidate->getBbox().intersects(bbox) && candidate->isLadder()) {
+                float diffX = pow(candidate->getCenter().x - bbox.left + 0.5 * bbox.width, 2);
+                float diffY = pow(candidate->getCenter().y - bbox.top + 0.5 * bbox.height, 2);
                 float dist = diffX + diffY;
                 if (min == -1 || dist < min) {
                     min = dist;
@@ -199,11 +199,11 @@ Block* World::getCollidingLadder(sf::FloatRect bbox) {
 
 Block* World::getCollidingRope(sf::FloatRect bbox) {
 
-    for (int j = bbox.Top / Block::HEIGHT; j <= (bbox.Top + bbox.Height) / Block::HEIGHT; j++)
-        for (int i = bbox.Left / Block::WIDTH; i <= (bbox.Left + bbox.Width) / Block::WIDTH; i++) {
+    for (int j = bbox.top / Block::HEIGHT; j <= (bbox.top + bbox.height) / Block::HEIGHT; j++)
+        for (int i = bbox.left / Block::WIDTH; i <= (bbox.left + bbox.width) / Block::WIDTH; i++) {
 
             Block *candidate = getBlock(i, j);
-            if (candidate->getBbox().Intersects(bbox) && candidate->isRope()) {
+            if (candidate->getBbox().intersects(bbox) && candidate->isRope()) {
                 return candidate;
 
             }

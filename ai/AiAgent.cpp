@@ -23,7 +23,7 @@ AiAgent::AiAgent(World* w, Character *c) {
     world = w;
     this->c = c;
     current = NULL;
-    timer = sf::Seconds(0);
+    timer = sf::seconds(0);
 }
 
 AiAgent::~AiAgent() {
@@ -119,8 +119,8 @@ Input AiAgent::update(sf::Time frametime) {
     
     timer += frametime;
     
-    if(timer >= sf::Seconds(0.5)) {
-        timer = sf::Seconds(0);
+    if(timer >= sf::seconds(0.5)) {
+        timer = sf::seconds(0);
         path.clear();
     }    
     
@@ -147,20 +147,20 @@ Input AiAgent::update(sf::Time frametime) {
     if(!path.empty()) {
         Block* first = path.front();
         
-        if(abs(first->getPosition().y - c->getPosition().y) <= c->getSpeed().y * frametime.AsSeconds())
+        if(abs(first->getPosition().y - c->getPosition().y) <= c->getSpeed().y * frametime.asSeconds())
             c->align(sf::Vector2f(c->getPosition().x, first->getPosition().y));            
         
         
-        if(first->getPosition().x + 0.5 * Block::WIDTH < c->getPosition().x + 0.5 * c->getBbox().Width)
+        if(first->getPosition().x + 0.5 * Block::WIDTH < c->getPosition().x + 0.5 * c->getBbox().width)
             rtn.Left = true;        
         
-        if(first->getPosition().x + 0.5 * Block::WIDTH > c->getPosition().x + 0.5 * c->getBbox().Width)
+        if(first->getPosition().x + 0.5 * Block::WIDTH > c->getPosition().x + 0.5 * c->getBbox().width)
             rtn.Right = true;     
         
-        if(first->getPosition().y + 0.5 * Block::HEIGHT < c->getPosition().y + 0.5 * c->getBbox().Height)
+        if(first->getPosition().y + 0.5 * Block::HEIGHT < c->getPosition().y + 0.5 * c->getBbox().height)
             rtn.Up = true;
         
-        if(first->getPosition().y + 0.5 * Block::HEIGHT > c->getPosition().y + 0.5 * c->getBbox().Height)
+        if(first->getPosition().y + 0.5 * Block::HEIGHT > c->getPosition().y + 0.5 * c->getBbox().height)
             rtn.Down = true; 
    
         sf::Vector2f dist = c->getCenter() - first->getCenter();

@@ -8,7 +8,7 @@
 #include "Goal.h"
 
 Goal::Goal() : Entity() {
-    image->SetTexture(*ImageManager::getInstance()->getImage("map/goal"));
+    image->setTexture(*ImageManager::getInstance()->getImage("map/goal"));
     setBBox(sf::Vector2f(36, 30));
 }
 
