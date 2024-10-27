@@ -18,11 +18,11 @@ Entity::~Entity() {
 }
 
 void Entity::draw(sf::RenderTarget* rt) {
-    rt->Draw(*image);
+    rt->draw(*image);
 }
 
 void Entity::setColor(sf::Color color) {
-    image->SetColor(color);
+    image->setColor(color);
 }
 
 sf::Vector2f Entity::getPosition() {
@@ -43,7 +43,7 @@ void Entity::setBBox(sf::Vector2f bbox) {
 
 void Entity::setPosition(sf::Vector2f position) {
     this->position = position;
-    image->SetPosition(position);
+    image->setPosition(position);
 }
 
 
